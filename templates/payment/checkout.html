@@ -1,0 +1,38 @@
+{%extends 'base.html'%}
+{%block title%}
+{%endblock%}
+{%block content%}
+</style>
+</head>
+
+<body>
+  <div class="">
+    <h1 class="">O Foodie, Enjoy your Food</h1>
+    <small class="">Your Order will be placed</small>
+    <div class="">
+      <button class="" id="pay-btn">Pay️
+      </button>
+    </div>
+  </div>
+</body>
+
+<!-- Razorpay's Javascript code. -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  var options = {
+
+    key: "{{ razorpay_merchant_key }}",
+    amount: "{{ razorpay_amount }}",
+    currency: "{{ currency }}",
+    name: "Dawn",
+    order_id: "{{ razorpay_order_id }}",
+    callback_url: "{{ callback_url }}",
+  };
+  var rzp1 = new Razorpay(options);
+  document.getElementById("pay-btn").onclick = function (e) {
+    rzp1.open();
+    e.preventDefault();
+  };
+
+</script>
+{%endblock%}

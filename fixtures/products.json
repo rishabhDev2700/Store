@@ -1,0 +1,122 @@
+[
+    {
+        "model": "store.Product",
+        "pk": 1,
+        "fields": {
+            "category": 1,
+            "name": "iPhone 12 Pro",
+            "slug": "Iphone12",
+            "description": "The iPhone 12 Pro features a new design and edge-to-edge Super Retina XDR display.",
+            "price": 999,
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=iPhone+12+Pro",
+            "thumbnail": "https://placehold.co/400x300?text=iPhone+12+Pro",
+            "date_added": "2024-07-14"
+        }
+    },
+    {
+        "model": "store.Product",
+        "pk": 2,
+        "fields": {
+            "category": 1,
+            "name": "iPad Pro 12.9-inch (5th generation)",
+            "description": "The iPad Pro features the powerful M1 chip and a stunning XDR display.",
+            "slug": "Ipad5thgen",
+            "price": 1099,
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=iPad+Pro+12.9-inch+(5th+generation)",
+            "thumbnail": "https://placehold.co/400x300?text=iPad+Pro+12.9-inch+(5th+generation)",
+            "date_added": "2024-07-14"
+        }
+    },
+    {
+        "model": "store.Product",
+        "pk": 3,
+        "fields": {
+            "category": 1,
+            "name": "MacBook Pro 14-inch",
+            "slug": "macbookpro14",
+            "description": "The MacBook Pro 14-inch (2023) offers a Liquid Retina XDR display, powered by the M2 Pro chip, delivering breakthrough performance and amazing battery life.",
+            "price": 1999,
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=MacBook+Pro+14-inch",
+            "thumbnail": "https://placehold.co/400x300?text=MacBook+Pro+14-inch",
+            "date_added": "2024-07-14"
+        }
+    },
+    {
+        "model": "store.Product",
+        "pk": 4,
+        "fields": {
+            "category": 1,
+            "name": "iPhone 14 Pro Max",
+            "slug": "Iphone14promax",
+            "description": "The iPhone 14 Pro Max offers the best performance and largest display in the iPhone 14 series.",
+            "price": 1099,
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=iPhone+14+Pro+Max",
+            "thumbnail": "https://placehold.co/400x300?text=iPhone+14+Pro+Max",
+            "date_added": "2024-07-14"
+        }
+    },
+    {
+        "model": "store.Product",
+        "pk": 5,
+        "fields": {
+            "category": 1,
+            "name": "iPhone 14",
+            "slug": "Iphone14",
+            "description": "The iPhone 14 introduces an advanced dual-camera system and A15 Bionic chip.",
+            "price": 799,
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=iPhone+14",
+            "thumbnail": "https://placehold.co/400x300?text=iPhone+14",
+            "date_added": "2024-07-14"
+        }
+    },
+    {
+        "model": "store.Product",
+        "pk": 6,
+        "fields": {
+            "category": 1,
+            "name": "Samsung Galaxy S22 Ultra",
+            "slug": "galaxys22ultra",
+            "description": "The Samsung Galaxy S22 Ultra offers a premium experience with its advanced camera and display.",
+            "price": 1199,
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=Samsung+Galaxy+S22+Ultra",
+            "thumbnail": "https://placehold.co/400x300?text=Samsung+Galaxy+S22+Ultra",
+            "date_added": "2024-07-14"
+        }
+    },
+    {
+        "model": "store.Product",
+        "pk": 7,
+        "fields": {
+            "category": 1,
+            "name": "Samsung Galaxy Z Flip4",
+            "slug": "galaxyzflip4",
+            "description": "The Galaxy Z Flip4 combines style and innovation with its unique foldable design.",
+            "price": 999,
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=Samsung+Galaxy+Z+Flip4",
+            "thumbnail": "https://placehold.co/400x300?text=Samsung+Galaxy+Z+Flip4",
+            "date_added": "2024-07-14"
+        }
+    },
+    {
+        "model": "store.Product",
+        "pk": 8,
+        "fields": {
+            "category": 1,
+            "name": "Samsung Galaxy A53",
+            "description": "The Galaxy A53 offers a balance of performance and affordability, with a versatile camera.",
+            "price": 449,
+            "slug": "galaxya53",
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=Samsung+Galaxy+A53",
+            "thumbnail": "https://placehold.co/400x300?text=Samsung+Galaxy+A53",
+            "date_added": "2024-07-14"
+        }
+    }
+]

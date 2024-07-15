@@ -1,0 +1,71 @@
+{%extends 'base.html'%}
+{%block title%}Orders{%endblock%}
+{%block content%}
+<div class="bag-summary">
+  <div class="row">
+    <h2 class="title">Your Orders</h2>
+    </div>
+    <div class="orders">
+        <h3 class="title">Incomplete Orders</h3>
+        <hr>
+        {% for order in incompleted_orders %}
+        <div id="{{order.0.id}}">
+            <h3 class="id">Order ID:{{order.0.id}}</h3>
+            <table>
+                <tr>
+                <th class="name">Item</th>
+                <th class="qnty">Qnty</th>
+                <th class="price">Price</th>
+                </tr>
+                {%for item in order.1 %}
+                <tr>
+                    <td class="name">{{item.item.name}}</td>
+                    <td class="qnty">{{item.quantity}}</td>
+                    <td class="price">{{item.price}}</td>
+                </tr>
+                {%endfor%}
+            </table>
+            <hr>          
+            <h2>Total:  Rs. {{order.0.total}}</h2>
+            <hr>
+            <br>
+        </div>
+        {% endfor %}
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <h3 class="title">Completed Orders</h3>
+        <hr>
+        {% for order in completed_orders %}
+        <div id="{{order.0.id}}">
+            <h3 class="id">Order ID:{{order.0.id}}</h3>
+            <table>
+                <tr>
+                <th class="name">Item</th>
+                <th class="qnty">Qnty</th>
+                <th class="price">Price</th>
+                </tr>
+                {%for item in order.1 %}
+                <tr>
+                    <td class="name">{{item.item.name}}</td>
+                    <td class="qnty">{{item.quantity}}</td>
+                    <td class="price">{{item.price}}</td>
+                </tr>
+                {%endfor%}
+            </table>          
+            <hr>          
+            <h2>Total:  Rs. {{order.0.total}}</h2>
+            <hr>
+            <br>        
+        </div>
+        {% endfor %}
+        <hr>
+       
+    </div>
+
+</div>
+
+{%endblock%}

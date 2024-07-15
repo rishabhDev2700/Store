@@ -1,0 +1,44 @@
+<div class="lg:flex lg:justify-around h-16 bg-black/50 backdrop-blur-md text-white fixed top-0 left-0 w-full z-50">
+    <div class="flex justify-between items-center px-4 py-2 lg:1/4">
+        <a class="hover:text-amber-300 duration-200" href="">
+            <header class="text-3xl uppercase font-bold">Dawn</header>
+        </a>
+        <div id="menu-button" class="lg:hidden">
+            <div class="w-10" id="menu">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M16 18V20H5V18H16ZM21 11V13H3V11H21ZM19 4V6H8V4H19Z"></path>
+                </svg>
+            </div>
+            <div class="w-10 hidden" id="close">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z">
+                    </path>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <nav
+        class="fixed top-16 bg-black/50 backdrop-blur-md left-0 text-md lg:text-lg flex flex-col items-stretch w-screen h-[90vh] -translate-y-full translate-x-full duration-200 lg:static lg:flex-row lg:justify-evenly lg:items-center lg:bg-transparent lg:backdrop-blur lg:translate-x-0 lg:translate-y-0 lg:h-auto lg:w-2/4 lg:text-center">
+        <a class="py-4 px-4 lg:w-full hover:bg-black/80 border-b-2 border-transparent duration-200"
+            href="{% url 'store:home'%}">Home</a>
+        <a class="py-4 px-4 lg:w-full hover:bg-black/80 border-b-2 border-transparent duration-200"
+            href="{% url 'store:explore'%}">Explore</a>
+        <a class="py-4 px-4 lg:w-full hover:bg-black/80 border-b-2 border-transparent duration-200"
+            href="{% url 'store:categories'%}">Categories</a>
+        {% if not user.is_authenticated %}
+        <a class="py-4 px-4 lg:w-full hover:bg-black/80 border-b-2 border-transparent duration-200"
+            href="{% url 'accounts:sign_in'%}">Sign
+            In</a>
+        <a class="py-4 px-4 lg:w-full hover:bg-black/80 border-b-2 border-transparent duration-200"
+            href="{% url 'accounts:sign_up'%}">Sign
+            Up</a>
+        {% else %}
+        <a class="py-4 px-4 lg:w-full bg-blue-600/80 hover:bg-blue-600 border-b-2 border-transparent duration-200"
+            href="{% url 'orders:summary'%}">Bag</a>
+        <a class="py-4 px-4 lg:w-full bg-red-600/80 hover:bg-red-600 border-b-2 border-transparent"
+            href="{% url 'accounts:logout'%}">Logout</a>
+        {% endif %}
+
+    </nav>
+</div>

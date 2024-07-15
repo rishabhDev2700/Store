@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Delius&family=Economica:wght@400;700&family=Mr+Dafoe&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="{%static 'css/styles.css'%}" />
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'fav/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'fav/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'fav/favicon-16x16.png' %}">
+  <link rel="manifest" href="{% static 'fav/site.webmanifest' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Megrim&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"></script>
+
+  <title>{% block title %}{% endblock title %}</title>
+</head>
+
+<body class="text-white bg-neutral-900/95 font-megrim">
+  {% include "./components/navigation.html" %}
+  <main class="flex items-start justify-center px-2 pt-24">
+    {% block content %} {% endblock%}
+  </main>
+  {% include "./components/footer.html" %}
+ 
+  <script src='{% static "js/script.js" %}'></script>
+  <script>
+    $(document).ready(function () {
+      $('#menu-button').click(function () {
+        $('#navbar').fadeToggle();
+      })
+      $('#message-close').click(function () {
+        $('.messages-wrapper').fadeOut(500, function () { $(this).remove(); });
+        $('#message-close').fadeOut(500, function () { $(this).remove(); });
+      })
+    })
+
+  </script>
+</body>
+
+</html>

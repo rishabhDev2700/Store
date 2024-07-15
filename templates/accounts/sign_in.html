@@ -1,0 +1,18 @@
+{%extends 'base.html'%}
+{%block title%}{%endblock%}
+{%block content%}
+<div class="flex flex-col items-center lg:w-3/5 mx-auto min-h-[60vh]">
+    <h1 class="text-4xl my-8">Sign In</h1>
+    <div class="lg:w-2/5">
+        <form action="{%url 'accounts:sign_in'%}" method="post" class="flex flex-col text-neutral-900">
+            {%csrf_token%}
+            <input class="p-2 m-2 rounded-md" type="text" name="username" id="username-input" placeholder="Username"
+                required>
+            <input class="p-2 m-2 rounded-md" type="password" name="password" id="password-input" placeholder="Password"
+                required>
+            <input class="px-4 py-2 rounded-md mt-4 bg-blue-600 hover:bg-blue-700 text-white w-32 self-center" type="submit"
+                value="Log In">
+        </form>
+    </div>
+</div>
+{%endblock%}

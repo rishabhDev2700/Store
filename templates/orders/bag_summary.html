@@ -1,0 +1,140 @@
+{%extends 'base.html'%}
+{%block title%}Bag Summary{%endblock%}
+{%block content%}
+<div class="w-full">
+  <div class="text-center flex flex-col items-center">
+    <h2 class="text-3xl my-4 font-bold">Your Bag</h2>
+    <div id="clear-button" class="bg-red-500/60 hover:bg-red-500 text-white p-2 m-2 w-80 duration-200">
+      Clear Bag
+    </div>
+  </div>
+  <div class="flex flex-col justify-start items-center">
+    {% if bag.len == 0 %}
+    <div class="animate-pulse text-2xl p-8 text-center">Your Bag is Empty, add some items</div>
+    {% endif %}
+    {% for item in bag %}
+    {%with product=item.item%}
+    <div data-index="{{product.id}}" id="{{product.id}}" class="flex justify-between items-center">
+      <img class="w-36 h-44 object-contain" src="{{product.cover.url}}" alt="">
+      <div class="flex flex-col justify-evenly">
+        <div class="flex flex-col">
+          <div class="bag-item-name">{{product.name}}</div>
+          <div class="bag-item-data">{{product.category}}</div>
+          <div class="bag-item-data">Price: {{product.price}}</div>
+        </div>
+        <div class="flex">
+          <div class="flex items-center justify-between">
+            <label for="quantity{{product.id}}">Qnty</label>
+            <select class="text-black p-2" name="quantity" id="quantity{{product.id}}">
+              <option value="{{item.quantity}}" selected hidden>{{item.quantity}}</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="flex">
+          <button id="update-button"
+            class="bg-green-500/80 text-white hover:bg-green-500 text-center mt-4 mx-1 px-3 py-1"
+            data-index="{{product.id}}">
+            Update
+          </button>
+          <button id="remove-button" class="bg-red-500/80 text-white hover:bg-red-500 text-center mt-4 mx-1 px-3 py-1"
+            data-index="{{product.id}}">
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+    {%endwith%}
+    {% endfor %}
+    <div class="text-4xl ">Total Amount: <span id="subtotal">{{bag.get_subtotal}}</span></div>
+    <div class="text-3xl">Total Items: <span id="bag-quantity">{{quantity}}</span></div>
+    {%if user.is_authenticated%}
+    <a class="bg-green-500/70 hover:bg-green-500 duration-200 hover:scale-95 px-8 py-4 m-4"
+      href="{%url 'payment:create_payment'%}">Pay</a>
+    {%endif%}
+  </div>
+
+</div>
+
+{%endblock%}
+{%block script%}
+<!--delete-->
+
+$(document).on("click", "#remove-button", function (e) {
+e.preventDefault();
+var item_id = $(this).data("index");
+$.ajax({
+type: "POST",
+url: '{% url "orders:bag_delete" %}',
+data: {
+item_id: $(this).data("index"),
+csrfmiddlewaretoken: "{{csrf_token}}",
+action: "post",
+},
+success: function (json) {
+$('#'+item_id).remove();
+if (json.quantity == 0) {
+subtotal = 0
+} else {
+subtotal = json.subtotal
+}
+
+$("#bag-quantity").replaceWith(json.quantity);
+$("#subtotal").replaceWith(json.subtotal);
+},
+error: function (xhr, errmsg, err) {},
+});
+});
+
+<!--update-->
+
+$(document).on("click", "#update-button", function (e) {
+e.preventDefault();
+var item_id = $(this).data("index");
+$.ajax({
+type: "POST",
+url: '{% url "orders:bag_update" %}',
+data: {
+item_id: $(this).data("index"),
+quantity: $("#quantity" + item_id + " option:selected").text(),
+csrfmiddlewaretoken: "{{csrf_token}}",
+action: "post",
+},
+success: function (json) {
+$("#bag-quantity").replaceWith(json.quantity);
+$("#subtotal").replaceWith(json.subtotal);
+
+},
+error: function (xhr, errmsg, err) {},
+});
+});
+
+<!--clear bag-->
+$(document).on("click", "#clear-button", function (e) {
+e.preventDefault();
+$.ajax({
+url: '{%url 'orders:bag_clear'%}',
+type: 'GET',
+success: function(json) {
+$('.bag-item').remove();
+
+$("#bag-quantity").replaceWith(json.quantity);
+$("#subtotal").replaceWith(json.subtotal);
+},
+error: function (xhr, errmsg, err) {},
+});
+});
+
+
+
+{%endblock%}

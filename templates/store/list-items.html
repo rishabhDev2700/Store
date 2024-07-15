@@ -1,0 +1,28 @@
+{%extends 'base.html'%}
+{%block title%}{{title}}{%endblock%}
+{% block content %}
+{% include "../components/sidebar.html" %}
+<div class="lg:w-full">
+
+    <h1 class="text-5xl text-center lg:my-8">{{category.name}}</h1>
+    {% if not products %}
+    <h1 class="text-2xl text-center font-bold">No Products</h1>
+    {% endif %}
+    <div class="flex flex-col justify-start items-center lg:grid lg:grid-cols-4 mx-auto font-raleway">
+        {% for product in products %}
+
+        <a class="m-2 rounded-md bg-neutral-900 flex w-full sm:w-64 min-h-[28rem] lg:w-96 hover:scale-[98%] duration-100 shadow-md hover:shadow-black/90 shadow-black/40"
+            href="{{product.get_absolute_url}}">
+            <div class="flex flex-col items-center">
+                <img class="w-64 lg:w-96 object-cover" src="{{product.cover.url}}" alt="">
+                <div class="p-4 flex flex-col justify-between">
+                    <h2 class="text-2xl">{{product.name}}</h2>
+                    <div class="font-light">{{product.category}}</div>
+                    <div class="font-bold text-2xl">$ {{product.price}}</div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
