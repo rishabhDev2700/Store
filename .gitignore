@@ -2,4 +2,3 @@ core/.env
 
 collected
 */__pycache__/
-*/migrations/
