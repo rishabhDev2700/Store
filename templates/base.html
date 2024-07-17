@@ -22,32 +22,28 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Megrim&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
     rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-      crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
 
   <title>{% block title %}{% endblock title %}</title>
 </head>
 
 <body class="text-white bg-neutral-900/95 font-megrim">
   {% include "./components/navigation.html" %}
-  <main class="flex items-start justify-center px-2 pt-24">
+  <main class="flex flex-col lg:flex-row items-start justify-center px-2 pt-24">
     {% block content %} {% endblock%}
   </main>
-  {% include "./components/footer.html" %}
- 
-  <script src='{% static "js/script.js" %}'></script>
-  <script>
-    $(document).ready(function () {
-      $('#menu-button').click(function () {
-        $('#navbar').fadeToggle();
-      })
-      $('#message-close').click(function () {
-        $('.messages-wrapper').fadeOut(500, function () { $(this).remove(); });
-        $('#message-close').fadeOut(500, function () { $(this).remove(); });
-      })
-    })
+  <div class="fixed flex justify-between bottom-12 right-12 bg-white text-black w-64" id="message-box">
+    <ul class="messages">
+      {% for message in messages %}
+      <li class="message text-lg px-4 py-2 rounded-md shadow-sm shadow-black/50">{{ message }}</li>
+      {% endfor %}
+    </ul>
 
-  </script>
+  </div>
+  {% include "./components/footer.html" %}
+
+  <script src='{% static "js/script.js" %}'></script>
 </body>
 
 </html>

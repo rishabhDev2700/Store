@@ -1,28 +1,13 @@
 {%extends 'base.html'%}
-{%block title%}{%endblock%}
-{%block content%}
+{%block title%}Explore Krate{%endblock%}
+
+{% block content %}
 {% include '../components/sidebar.html'%}
-<div class="flex flex-col items-center lg:w-3/5 mx-auto min-h-[60vh] font-raleway">
-    <h1 class="text-4xl my-8">Explore</h1>
-    <div class="lg:w-3/5">
-        <h2>New Items</h2>
-        <div class="flex flex-wrap justify-center items-center lg:grid lg:grid-cols-4 mx-auto font-raleway">
-            {% for product in products %}
+<div class="w-5/6 mx-auto">
+    <h1 class="text-4xl my-8 text-center">Explore</h1>
 
-            <a class="m-2 bg-neutral-900 flex w-full sm:w-64 min-h-[28rem] hover:scale-[98%] duration-100"
-                href="{{product.get_absolute_url}}">
-                <div class="flex flex-col items-center">
-                    <img class="w-64 object-cover" src="{{product.cover.url}}" alt="">
-                    <div class="p-4 flex flex-col justify-between">
-                        <h2 class="text-2xl">{{product.name}}</h2>
-                        <div class="font-light">{{product.category}}</div>
-                        <div class="font-bold text-2xl">$ {{product.price}}</div>
-                    </div>
-                </div>
-            </a>
-            {% endfor %}
-        </div>
-
+    <div class="flex flex-col items-center justify-start lg:grid lg:grid-cols-4 mx-auto">
+        
     </div>
 </div>
-{%endblock%}
+{% endblock content %}

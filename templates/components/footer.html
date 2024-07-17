@@ -1,17 +1,22 @@
 <footer class="w-full h-[40vh] lg:h-[30vh] flex flex-col justify-between items-center font-raleway font-extralight">
     <ul class="grid grid-cols-2 lg:grid-cols-3 text-center mt-12">
-        <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200" href="">Explore</a>
-        <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200" href="">Categories</a>
-        <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200" href="">New Uploads</a>
-        <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200" href="">Sign Up</a>
-        <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200" href="">Sign In</a>
-        <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200" href="">Privacy Policy</a>
-        <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200" href="">Terms and Conditions</a>
+        <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200"
+            href="{% url 'store:explore' %}">Explore</a>
+        <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200"
+            href="{% url 'store:categories' %}">Categories</a>
+        <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200"
+            href="{% url 'accounts:sign_up' %}">Sign Up</a>
+        <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200"
+            href="{% url 'accounts:sign_in' %}">Sign In</a>
+        <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200"
+            href="{% url 'store:privacy' %}">Privacy Policy</a>
+        <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200"
+            href="{% url 'store:terms' %}">Terms and Conditions</a>
     </ul>
+    <div class="animate-pulse font-light">built by Rishabhdev2700 from Fuzzydevs.</div>
     <div class="pb-4 text-slate-300 text-sm">
         <span class="lg:mx-12">Copyright 2024.</span>
         <span class="lg:mx-12">All Rights Reserved</span>
 
     </div>
-
 </footer>

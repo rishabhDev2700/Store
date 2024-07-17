@@ -86,7 +86,6 @@ class ProductImage(models.Model):
     name = models.CharField(max_length=40)
     image = models.ImageField(upload_to="media/")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     objects = models.Manager()
 
     def __str__(self):

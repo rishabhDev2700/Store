@@ -1,20 +1,15 @@
-{%extends 'base.html'%}
+{%extends '../base.html'%}
 {%block title%}
 {%endblock%}
 {%block content%}
-</style>
-</head>
-
-<body>
-  <div class="">
-    <h1 class="">O Foodie, Enjoy your Food</h1>
-    <small class="">Your Order will be placed</small>
-    <div class="">
-      <button class="" id="pay-btn">Pay️
+  <div class="text-center">
+    <h1 class="text-5xl text-center">Krate</h1>
+    <div class="text-xl my-6">After confirming payment you order will be placed</div>
+    <div class="grid justify-center text-3xl animate animate-pulse">
+      <button class="px-12 py-4 my-8 bg-green-500 text-white hover:bg-green-600 hover:scale-95 rounded-md shadow-md shadow-black/50 duration-200" id="pay-btn">Pay️
       </button>
     </div>
   </div>
-</body>
 
 <!-- Razorpay's Javascript code. -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>

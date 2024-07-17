@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     "orders",
     "store",
     "payment",
-    # "store_admin",
     # 3rd party
     "crispy_forms",
     "crispy_tailwind",
@@ -61,7 +60,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "store_admin.middleware.LoginRequiredAccess",
 ]
 
 ROOT_URLCONF = "core.urls"

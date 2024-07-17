@@ -4,9 +4,17 @@
 {% block content %}
 {% include "../components/sidebar.html" %}
 <main class="lg:float-right min-h-[80vh] mx-2 md-w-4/6 lg:w-4/6 lg:mr-12 flex flex-wrap justify-evenly items-start">
-    <div class="flex flex-col md:grid md:grid-cols-1 lg:grid-cols-4 md:gap-x-8 ">
-        <img class="object-contain w-full h-96 lg:col-span-2" src="{{product.cover.url}}" />
-        <div class="w-full col-span-1 lg:cols-span-2 lg:ml-24 flex flex-col justify-center">
+    <div class="flex flex-col md:grid md:grid-cols-1 lg:grid-cols-4 md:gap-x-8">
+        <div class="lg:col-span-2 w-full">
+
+            <div class="snap-x overflow-x-scroll flex">
+                {% for image in images %}
+                <img class="object-cover snap-start"
+                    src="{{image.image.url}}" />
+                {% endfor %}
+            </div>
+        </div>
+        <div class="w-full col-span-1 lg:col-span-2 flex flex-col justify-center">
             <h1 class="text-4xl my-4">{{product.name}}</h1>
             <hr />
             <h2 class="text-2xl font-raleway font-bold my-4">Price: ${{product.price}}</h2>
@@ -31,27 +39,32 @@
                 Cart
             </a>
         </div>
-        <div class="col-span-4">
+        <div class="col-span-4 bg-neutral-800 shadow-inner shadow-black/50">
             <h2 class="text-5xl mx-2 my-4">Reviews</h2>
             <div class="flex flex-wrap">
+                {% if not reviews %}
+                <h2 class="text-2xl m-12">No Reviews Yet</h2>
+                {% endif %}
 
                 <!-- start of review -->
+                {%for review in reviews%}
                 <div class="bg-white text-black mb-8 p-4 shadow-md shadow-black border-2 border-black md:w-96 md:mx-2">
                     <div class="flex justify-between items-start py-2  border-b-2 border-black mb-4">
-                        <h2 class="text-2xl font-bebas">User-12332</h2>
+                        <h2 class="text-2xl font-bebas">{{review.user.username}}</h2>
                         <span class="flex items-center justify-center">
                             <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M23.632 9.201a.628.628 0 0 1-.22.678l-5.726 4.96 1.727 7.394a.606.606 0 0 1-.935.676l-6.503-3.953-6.503 3.953a.713.713 0 0 1-.374.112.57.57 0 0 1-.34-.109.629.629 0 0 1-.222-.679l1.729-7.393L.539 9.879A.607.607 0 0 1 .897 8.78l7.536-.635 2.965-7.083a.62.62 0 0 1 1.155.001l2.965 7.082 7.536.635a.63.63 0 0 1 .578.42z" />
                                 <path fill="none" d="M0 0h24v24H0z" />
                             </svg>
-                            <span class="px-2 text-2xl font-black">4</span>
+                            <span class="px-2 text-2xl font-black">{{review.rating}}</span>
                         </span>
                     </div>
                     <p>
-                        {% lorem 30 w %}
+                        {{review.review}}
                     </p>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -69,8 +82,17 @@
                 action: 'post'
     },
         success: function (json) {
-            document.getElementById("bag-quantity").innerHTML = json.quantity
-            document.getElementById("subtotal").innerHTML = json.subtotal;
+            const messageBox = document.getElementById("message-box");
+            const messagesList = document.querySelector(".messages");
+            const newMessage = document.createElement("li");
+            newMessage.className = "message text-lg px-4 py-2 rounded-md shadow-sm shadow-black/50";
+            newMessage.textContent = json.message;
+            messagesList.appendChild(newMessage);
+            messageBox.style.display = 'flex';
+            setTimeout(function () {
+                console.log("in the timeout")
+                newMessage.style.display = 'none';
+            }, 2000);
         },
         error: function (xhr, errmsg, err) { }
       });

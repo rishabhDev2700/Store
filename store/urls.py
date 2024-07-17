@@ -14,6 +14,8 @@ from store.views import (
     show_product,
     search_products,
     product_by_tag,
+    terms_and_conditions,
+    privacy
 )
 
 app_name = "store"
@@ -29,4 +31,6 @@ urlpatterns = [
     path("review-form/<int:id>", review_form, name="review-form"),
     path("search", search_products, name="search"),
     path("tag/<slug:slug>", product_by_tag, name="by-tag"),
+    path("terms", terms_and_conditions, name="terms"),
+    path("privacy-policy", privacy, name="privacy"),
 ]

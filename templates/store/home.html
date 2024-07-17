@@ -1,37 +1,11 @@
-{% extends 'base.html' %}
-{%load static%}
-{% block title %}
-Foodie's Stop
-{% endblock title %}
+{%extends 'base.html'%}
+{%block title%}Krate Home{%endblock%}
+
 {% block content %}
-{% include '../components/sidebar.html' %}
-<div class="">
-    <div class="row">
-        <h3 class="title">The Menu</h3>
-        <div class="categories">
-            {%for category in categories%}
-            <a class="capsule" href="{{category.get_absolute_url}}">{{category.name}}</a>
-            {%endfor%}
-        </div>
-    </div>
-    <div class="wrapper">
-        <div class="items">
-            {% for item in items %}
-            <a class="card" href="{{ item.get_absolute_url }}">
-                <div class="">
-                    <div class="thumbnail">
-                        <img class="card-img" src="{{item.cover.url}}" alt="">
-                    </div>
-                    <div class="card-details">
-                        <div class="item-name">{{item.name}}</div>
-                        <div class="item-category">Category: {{item.category}}</div>
-                        <div class="item-description">{{item.description}}</div>
-                        <div class="item-price">Rs. {{item.price}}</div>
-                    </div>
-                </div>
-            </a>
-            {% endfor %}
-        </div>
-    </div>
+{% include '../components/sidebar.html'%}
+<div class="w-5/6 mx-auto">
+    <h1 class="text-4xl my-8 text-center">Home</h1>
+
+
 </div>
 {% endblock content %}

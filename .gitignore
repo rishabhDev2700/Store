@@ -2,3 +2,4 @@ core/.env
 
 collected
 */__pycache__/
+media/*

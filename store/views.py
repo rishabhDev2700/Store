@@ -6,7 +6,7 @@ from django.shortcuts import render
 
 from django.shortcuts import redirect, render, get_object_or_404
 from store.forms import RatingForm
-from store.models import Category, Product, Rating
+from store.models import Category, Product, ProductImage, Rating
 from django.db.models import Prefetch
 from django.core.paginator import Paginator
 from django.contrib.postgres.search import SearchVector
@@ -19,9 +19,10 @@ def homepage(request):
     """
     Home page of the website
     """
+    categories = Category.objects.all()
     new_arrivals = Product.objects.all()[:10]
     tags = Tag.objects.all()
-    context = {"products": new_arrivals, "tags": tags}
+    context = {"products": new_arrivals, "tags": tags, "categories": categories}
 
     return render(request, "store/home.html", context=context)
 
@@ -57,8 +58,16 @@ def show_product(request, slug):
     reviews = Rating.objects.filter(product=product)[:5]
     categories = Category.objects.all()
     tags = Tag.objects.all()
-
-    context = {"product": product, "reviews": reviews, "categories": categories}
+    reviews = Rating.objects.filter(product=product)[0:5]
+    images = ProductImage.objects.filter(product=product)
+    context = {
+        "product": product,
+        "reviews": reviews,
+        "categories": categories,
+        "tags": tags,
+        "reviews": reviews,
+        "images": images,
+    }
     return render(request, "store/single-item.html", context=context)
 
 
@@ -135,7 +144,7 @@ def search_products(request):
         context={
             "products": search_result,
             "tags": tags,
-            "category": {"name": "Search result"},
+            "category": {"name": "Search results"},
         },
     )
 
@@ -146,3 +155,11 @@ def product_by_tag(request, slug):
     return render(
         request, "store/list-items.html", {"products": products, "tags": tags}
     )
+
+
+def terms_and_conditions(request):
+    return render(request, "store/terms.html")
+
+
+def privacy(request):
+    return render(request, "store/privacy.html")

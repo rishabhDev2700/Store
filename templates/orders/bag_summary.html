@@ -4,9 +4,9 @@
 <div class="w-full">
   <div class="text-center flex flex-col items-center">
     <h2 class="text-3xl my-4 font-bold">Your Bag</h2>
-    <div id="clear-button" class="bg-red-500/60 hover:bg-red-500 text-white p-2 m-2 w-80 duration-200">
+    <button id="clear-button" class="bg-red-500/60 hover:bg-red-500 text-white p-2 m-2 w-80 duration-200">
       Clear Bag
-    </div>
+    </button>
   </div>
   <div class="flex flex-col justify-start items-center">
     {% if bag.len == 0 %}
@@ -14,12 +14,12 @@
     {% endif %}
     {% for item in bag %}
     {%with product=item.item%}
-    <div data-index="{{product.id}}" id="{{product.id}}" class="flex justify-between items-center">
-      <img class="w-36 h-44 object-contain" src="{{product.cover.url}}" alt="">
-      <div class="flex flex-col justify-evenly">
+    <div data-index="{{product.id}}" id="{{product.id}}"
+      class="bag-item flex flex-col lg:flex-row justify-between px-12 lg:w-5/6 bg-black/50 mt-8 rounded-sm">
+      <img class=" h-32 object-contain" src="{{product.cover.url}}" alt="">
+      <div class="text-3xl self-center">{{product.name}}</div>
+      <div class="flex flex-col items-center justify-evenly">
         <div class="flex flex-col">
-          <div class="bag-item-name">{{product.name}}</div>
-          <div class="bag-item-data">{{product.category}}</div>
           <div class="bag-item-data">Price: {{product.price}}</div>
         </div>
         <div class="flex">
@@ -41,7 +41,7 @@
           </div>
 
         </div>
-        <div class="flex">
+        <div class="flex mb-4">
           <button id="update-button"
             class="bg-green-500/80 text-white hover:bg-green-500 text-center mt-4 mx-1 px-3 py-1"
             data-index="{{product.id}}">
@@ -56,8 +56,8 @@
     </div>
     {%endwith%}
     {% endfor %}
-    <div class="text-4xl ">Total Amount: <span id="subtotal">{{bag.get_subtotal}}</span></div>
-    <div class="text-3xl">Total Items: <span id="bag-quantity">{{quantity}}</span></div>
+    <div class="text-4xl mt-12">Total Amount: <span id="subtotal" class="underline">${{bag.get_subtotal}}</span></div>
+    <div class="text-2xl font-light my-4">Total Items: <span id="bag-quantity">{{quantity}}</span></div>
     {%if user.is_authenticated%}
     <a class="bg-green-500/70 hover:bg-green-500 duration-200 hover:scale-95 px-8 py-4 m-4"
       href="{%url 'payment:create_payment'%}">Pay</a>
@@ -66,75 +66,107 @@
 
 </div>
 
-{%endblock%}
-{%block script%}
-<!--delete-->
+<script>
+  //<!--delete-->
+  console.log("This is from summary")
+  $("#remove-button").click(function (e) {
+    e.preventDefault();
+    var item_id = $(this).data("index");
+    $.ajax({
+      type: "POST",
+      url: '{% url "orders:bag_delete" %}',
+      data: {
+        item_id: $(this).data("index"),
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        action: "post",
+      },
+      success: function (json) {
+        $('#' + item_id).remove();
+        if (json.quantity == 0) {
+          subtotal = 0
+        } else {
+          subtotal = json.subtotal
+        }
+        console.log('inserting message')
+        const messageBox = document.getElementById("message-box");
+        const messagesList = document.querySelector(".messages");
+        const newMessage = document.createElement("li");
+        newMessage.className = "message text-lg px-4 py-2 rounded-md shadow-sm shadow-black/50";
+        newMessage.textContent = json.message;
+        messagesList.appendChild(newMessage);
+        messageBox.style.display = 'flex';
+        $("#bag-quantity").replaceWith(json.quantity);
+        $("#subtotal").replaceWith(json.subtotal);
+        setTimeout(function () {
+          console.log("in the timeout")
+          newMessage.style.display = 'none';
+        }, 2000);
+      },
+      error: function (xhr, errmsg, err) { },
+    });
+  });
 
-$(document).on("click", "#remove-button", function (e) {
-e.preventDefault();
-var item_id = $(this).data("index");
-$.ajax({
-type: "POST",
-url: '{% url "orders:bag_delete" %}',
-data: {
-item_id: $(this).data("index"),
-csrfmiddlewaretoken: "{{csrf_token}}",
-action: "post",
-},
-success: function (json) {
-$('#'+item_id).remove();
-if (json.quantity == 0) {
-subtotal = 0
-} else {
-subtotal = json.subtotal
-}
+  //<!--update-->
 
-$("#bag-quantity").replaceWith(json.quantity);
-$("#subtotal").replaceWith(json.subtotal);
-},
-error: function (xhr, errmsg, err) {},
-});
-});
+  $("#update-button").click(function (e) {
+    e.preventDefault();
+    var item_id = $(this).data("index");
+    $.ajax({
+      type: "POST",
+      url: '{% url "orders:bag_update" %}',
+      data: {
+        item_id: $(this).data("index"),
+        quantity: $("#quantity" + item_id + " option:selected").text(),
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        action: "post",
+      },
+      success: function (json) {
+        const messageBox = document.getElementById("message-box");
+        const messagesList = document.querySelector(".messages");
+        const newMessage = document.createElement("li");
+        newMessage.className = "message text-lg px-4 py-2 rounded-md shadow-sm shadow-black/50";
+        newMessage.textContent = json.message;
+        messagesList.appendChild(newMessage);
+        messageBox.style.display = 'flex';
+        $("#bag-quantity").replaceWith(json.quantity);
+        $("#subtotal").replaceWith(json.subtotal);
+        setTimeout(function () {
+          console.log("in the timeout")
+          newMessage.style.display = 'none';
+        }, 2000);
 
-<!--update-->
+      },
+      error: function (xhr, errmsg, err) { },
+    });
+  });
 
-$(document).on("click", "#update-button", function (e) {
-e.preventDefault();
-var item_id = $(this).data("index");
-$.ajax({
-type: "POST",
-url: '{% url "orders:bag_update" %}',
-data: {
-item_id: $(this).data("index"),
-quantity: $("#quantity" + item_id + " option:selected").text(),
-csrfmiddlewaretoken: "{{csrf_token}}",
-action: "post",
-},
-success: function (json) {
-$("#bag-quantity").replaceWith(json.quantity);
-$("#subtotal").replaceWith(json.subtotal);
-
-},
-error: function (xhr, errmsg, err) {},
-});
-});
-
-<!--clear bag-->
-$(document).on("click", "#clear-button", function (e) {
-e.preventDefault();
-$.ajax({
-url: '{%url 'orders:bag_clear'%}',
-type: 'GET',
-success: function(json) {
-$('.bag-item').remove();
-
-$("#bag-quantity").replaceWith(json.quantity);
-$("#subtotal").replaceWith(json.subtotal);
-},
-error: function (xhr, errmsg, err) {},
-});
-});
+  //<!--clear bag-->
+  $("#clear-button").click(function (e) {
+    $.ajax({
+      url: "{%url 'orders:bag_clear'%}",
+      type: 'GET',
+      success: function (json) {
+        console.log(json.message)
+        $('.bag-item').remove();
+        const messageBox = document.getElementById("message-box");
+        const messagesList = document.querySelector(".messages");
+        const newMessage = document.createElement("li");
+        newMessage.className = "message text-lg px-4 py-2 rounded-md shadow-sm shadow-black/50";
+        newMessage.textContent = json.message;
+        messagesList.appendChild(newMessage);
+        messageBox.style.display = 'flex';
+        $("#bag-quantity").replaceWith(json.quantity);
+        $("#subtotal").replaceWith(json.subtotal);
+        setTimeout(function () {
+          console.log("in the timeout")
+          newMessage.style.display = 'none';
+        }, 2000);
+      },
+      error: function (xhr, errmsg, err) { },
+    });
+  });
 
 
 
+</script>
 {%endblock%}
