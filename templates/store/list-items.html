@@ -1,28 +1,42 @@
 {%extends 'base.html'%}
 {%block title%}{{title}}{%endblock%}
+{% load static%}
 {% block content %}
 {% include "../components/sidebar.html" %}
 <div class="lg:w-full">
 
-    <h1 class="text-5xl text-center lg:my-8">{{category.name}}</h1>
-    {% if not products %}
-    <h1 class="text-2xl text-center font-bold">No Products</h1>
-    {% endif %}
+    <h1 class="text-5xl text-center lg:mb-8 py-4">{{category.name}}</h1>
+
+
+    {% if category.name == "Gaming Consoles"%}
+    <div>
+        <img class="h-[40vh] lg:h[50vh] w-screen object-cover object-center"
+            src="https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/74136d127668593.6146cbae0c869.jpg">
+    </div>
+    {% elif category.name == "Laptops"%}
+    <img class="h-[40vh] lg:h-[50vh] w-full object-cover object-center" src="{%static 'assets/laptop-large.jpg'%}">
+    {% elif category.name == "Smartphones" %}
+    <img class="h-[40vh] w-full object-cover object-top lg:hidden" src="{%static 'assets/mobile-iphone-15.jpg'%}">
+    <img class="h-[50vh] w-full object-cover hidden lg:block" src="{%static 'assets/iphone15-banner.jpg'%}">
+    {%endif%}
     <div class="flex flex-col justify-start items-center lg:grid lg:grid-cols-4 mx-auto font-raleway">
         {% for product in products %}
 
-        <a class="m-2 rounded-md bg-neutral-900 flex w-full sm:w-64 min-h-[28rem] lg:w-96 hover:scale-[98%] duration-100 shadow-md hover:shadow-black/90 shadow-black/40"
+        <a class="m-2 rounded-md bg-neutral-900 flex w-full sm:w-64 min-h-[26rem] lg:w-96 hover:scale-[98%] duration-100 shadow-md hover:shadow-black/90 shadow-black/40"
             href="{{product.get_absolute_url}}">
-            <div class="flex flex-col items-center">
-                <img class="w-64 lg:w-96 object-cover" src="{{product.cover.url}}" alt="">
-                <div class="p-4 flex flex-col justify-between">
-                    <h2 class="text-2xl">{{product.name}}</h2>
-                    <div class="font-light">{{product.category}}</div>
-                    <div class="font-bold text-2xl">$ {{product.price}}</div>
+            <div class="flex flex-col">
+                <img class="w-full lg:w-96 object-cover" src="{{product.cover.url}}" alt="">
+                <div class="py-4 px-2 flex flex-col justify-between">
+                    <h2 class="text-2xl my-1">{{product.name}}</h2>
+                    <div class="font-light my-1">{{product.category}}</div>
+                    <div class="font-bold my-1 text-2xl">$ {{product.price}}</div>
                 </div>
             </div>
         </a>
         {% endfor %}
+        {% if not products %}
     </div>
+    <h1 class="text-2xl text-center font-bold my-8">No Products</h1>
+    {% endif %}
 </div>
 {% endblock content %}

@@ -1,4 +1,4 @@
-<aside class="block lg:w-1/6 mb-8 lg:mb-auto lg:px-2 mx-auto">
+<aside class="block lg:w-1/6 mb-8 lg:mb-auto lg:px-2 mx-auto lg:mt-12">
     <form action="{% url 'store:search' %}" id="searchbar" method="get" class="flex items-center justify-center">
 
         <input class="p-2 focus:outline-none rounded-l-full text-black shadow-md shadow-black/50 font-bold" type="text"
@@ -18,7 +18,7 @@
             <div class="flex flex-col justify-center text-neutral-700">
 
                 {% for category in categories%}
-                <a class="bg-white rounded-sm p-2 m-2"
+                <a class="bg-neutral-600 hover:bg-neutral-950 text-white rounded-sm p-2 m-2 duration-200"
                     href=" {% url 'store:show-category' category.slug %}">{{category.name}}</a>
                 {% endfor %}
             </div>
@@ -28,7 +28,7 @@
         <div class="flex flex-wrap">
             {%for tag in tags%}
             <a href="{% url 'store:by-tag' tag.slug %}"
-                class="bg-white text-neutral-800 m-2 p-2 rounded-md hover:bg-neutral-300">
+                class="bg-white text-neutral-950 font-semibold uppercase m-2 p-2 rounded-md hover:bg-neutral-500 duration-200">
                 {{tag.name}}
             </a>
             {% endfor %}

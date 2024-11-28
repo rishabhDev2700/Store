@@ -3,17 +3,35 @@
 {% block title %}Product-detail{% endblock %}
 {% block content %}
 {% include "../components/sidebar.html" %}
+<style>
+
+</style>
 <main class="lg:float-right min-h-[80vh] mx-2 md-w-4/6 lg:w-4/6 lg:mr-12 flex flex-wrap justify-evenly items-start">
     <div class="flex flex-col md:grid md:grid-cols-1 lg:grid-cols-4 md:gap-x-8">
-        <div class="lg:col-span-2 w-full">
-
-            <div class="snap-x overflow-x-scroll flex">
+        <div class="carousel relative overflow-hidden w-full lg:col-span-2">
+            <div class="carousel-inner relative w-full h-[40vh] md:h-[30vh] lg:h-[50vh]">
                 {% for image in images %}
-                <img class="object-cover snap-start"
-                    src="{{image.image.url}}" />
+                <div class="carousel-item w-full h-full text-center hidden duration-200">
+                    <img src="{{image.image.url}}" alt="Slide 2" class="w-full h-full object-cover">
+                </div>
                 {% endfor %}
             </div>
+            <button id="prev"
+                class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white opacity-30 hover:opacity-70 duration-200 h-full w-8 lg:w-12 rounded-r-2xl grid items-center justify-center"><svg
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="52" height="52" fill="currentColor">
+                    <path
+                        d="M8.36853 12L13.1162 3.03212L14.8838 3.9679L10.6315 12L14.8838 20.0321L13.1162 20.9679L8.36853 12Z">
+                    </path>
+                </svg></button>
+            <button id="next"
+                class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white opacity-30 hover:opacity-70 duration-200 h-full w-8 lg:w-12 rounded-l-2xl grid items-center justify-center"><svg
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="52" height="52" fill="currentColor">
+                    <path
+                        d="M15.6315 12L10.8838 3.03212L9.11622 3.9679L13.3685 12L9.11622 20.0321L10.8838 20.9679L15.6315 12Z">
+                    </path>
+                </svg></button>
         </div>
+
         <div class="w-full col-span-1 lg:col-span-2 flex flex-col justify-center">
             <h1 class="text-4xl my-4">{{product.name}}</h1>
             <hr />
@@ -70,6 +88,26 @@
     </div>
 </main>
 <script>
+    let currentIndex = 0;
+    const items = $('.carousel-item');
+    items.eq(currentIndex).toggleClass('hidden');
+    const itemCount = items.length;
+
+    function showItem(index) {
+        items.addClass('hidden');
+        items.eq(index).removeClass('hidden');
+    }
+
+    $('#next').click(function () {
+        currentIndex = (currentIndex + 1) % itemCount;
+        showItem(currentIndex);
+    });
+
+    $('#prev').click(function () {
+        currentIndex = (currentIndex - 1 + itemCount) % itemCount;
+        showItem(currentIndex);
+    });
+
     $(document).on('click', '#add-button', function (e) {
         e.preventDefault();
         $.ajax({

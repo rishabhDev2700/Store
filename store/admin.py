@@ -1,9 +1,11 @@
 from django.contrib import admin
 
-from store.models import Product, Category, ProductImage
+from store.models import Product, Category, ProductImage, Order, OrderProduct
+from payment.models import PaymentOrder
 
 # Register your models here.
 # admin.py
+
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
@@ -17,3 +19,6 @@ class ProductAdmin(admin.ModelAdmin):
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category)
 admin.site.register(ProductImage)
+admin.site.register(Order)
+admin.site.register(OrderProduct)
+admin.site.register(PaymentOrder)

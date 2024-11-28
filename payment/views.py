@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from core import settings
 from orders.bag import Bag
-from store.models import Order, OrderProduct as OrderItem
+from store.models import Order, OrderProduct
 from payment.models import PaymentOrder
 
 client = razorpay.Client(auth=(settings.RAZORPAY_ID, settings.RAZORPAY_SECRET_KEY))
@@ -66,10 +66,11 @@ def payment_handler(request):
                     payment_order.verified = True
                     payment_order.save()
                     bag = Bag(request)
+                    print(bag)
                     for item in bag:
-                        OrderItem.objects.create(
+                        OrderProduct.objects.create(
                             order=order,
-                            item=item["item"],
+                            product=item["item"],
                             price=item["total_price"],
                             quantity=item["quantity"],
                         )
