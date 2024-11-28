@@ -133,9 +133,10 @@ def review_form(request, id):
 
 def search_products(request):
     query = request.GET.get("query")
-    search_result = Product.objects.annotate(
-        search=SearchVector("name", "description", "slug")
-    ).filter(search=query)
+    # search_result = Product.objects.annotate(
+    #     search=SearchVector("name", "description", "slug")
+    # ).filter(search=query)
+    search_result = Product.objects.filter(name__startswith=query)
     tags = Tag.objects.all()
     print(query)
     return render(
