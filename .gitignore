@@ -3,4 +3,4 @@ core/.env
 collected
 */__pycache__/
 # media/*
-venv
+venv/
