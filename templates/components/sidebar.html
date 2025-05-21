@@ -1,9 +1,10 @@
-<aside class="block lg:w-1/6 mb-8 lg:mb-auto lg:px-2 mx-auto lg:mt-12">
+<aside class="w-full md:col-span-1 lg:col-span-2 xl:col-span-3 2xl:col-span-2">
     <form action="{% url 'store:search' %}" id="searchbar" method="get" class="flex items-center justify-center">
 
-        <input class="p-2 focus:outline-none rounded-l-full text-black shadow-md shadow-black/50 font-bold" type="text"
-            name="query" placeholder="Search">
-        <button class="p-2 bg-white rounded-r-full hover:bg-purple-500 shadow-md shadow-black/50 duration-200"
+        <input
+            class="w-full py-2 px-4 focus:outline-none rounded-l-full text-black shadow-md font-bold border-2 border-gray-200"
+            type="text" name="query" placeholder="Search">
+        <button class="p-2 bg-white rounded-r-full hover:bg-purple-500 shadow-md border-2 border-gray-200 duration-200"
             form="searchbar" value="submit" role="search" type="submit">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="rgba(0,0,0,1)">
                 <path
@@ -12,23 +13,23 @@
             </svg>
         </button>
     </form>
-    <div class="hidden lg:flex lg:flex-col lg:h-screen">
+    <div class="hidden md:flex md:flex-col xl:min-h-[70vh] w-full lg:px-4">
         <div class=" text-center">
-            <h2 class="text-2xl my-4">Categories</h2>
-            <div class="flex flex-col justify-center text-neutral-700">
+            <h2 class="my-4 text-black text-center text-base">Categories</h2>
+            <div class="flex flex-col lg:flex-row justify-center text-neutral-700">
 
                 {% for category in categories%}
-                <a class="bg-neutral-600 hover:bg-neutral-950 text-white rounded-sm p-2 m-2 duration-200"
+                <a class="bg-neutral-200 hover:bg-neutral-600 hover:text-white rounded-md p-2 m-2 duration-200"
                     href=" {% url 'store:show-category' category.slug %}">{{category.name}}</a>
                 {% endfor %}
             </div>
 
         </div>
-        <h2 class="text-3xl mt-8 mb-4">Tags</h2>
-        <div class="flex flex-wrap">
+        <h2 class="my-4 text-black text-center text-base">Tags</h2>
+        <div class="flex flex-wrap justify-center">
             {%for tag in tags%}
             <a href="{% url 'store:by-tag' tag.slug %}"
-                class="bg-white text-neutral-950 font-semibold uppercase m-2 p-2 rounded-md hover:bg-neutral-500 duration-200">
+                class="bg-white text-neutral-950 font-light rounded-md uppercase m-2 py-1 px-2 border-2 border-gray-400 hover:bg-neutral-500 duration-200">
                 {{tag.name}}
             </a>
             {% endfor %}

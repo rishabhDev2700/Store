@@ -10,13 +10,14 @@ from django.urls import reverse
 from taggit.managers import TaggableManager
 from accounts.models import User
 from uuid import uuid4
-
+from thumbnails.fields import ImageField
+from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 class Category(models.Model):
     """Category model for categorizing products"""
 
-    cover = models.ImageField(upload_to="covers/")
+    cover = ImageField(upload_to="covers/")
     name = models.CharField(max_length=80)
     description = models.TextField()
     slug = models.SlugField(blank=False, unique=True, max_length=30)
@@ -60,8 +61,7 @@ class Product(models.Model):
     price = models.PositiveIntegerField()
     date_added = models.DateField(auto_now=True)
     is_available = models.BooleanField(default=True)
-    cover = models.ImageField(upload_to=path_and_rename, null=True)
-    thumbnail = models.ImageField(upload_to=path_and_rename, null=True)
+    cover = ImageField(upload_to=path_and_rename, null=True)
     tags = TaggableManager()
     objects = models.Manager()
 
@@ -102,16 +102,26 @@ class Discount(models.Model):
     objects = models.Manager()
 
 
+class ORDER_STATUS(models.TextChoices):
+    PLACED = ("PLACED", "Placed")
+    COMPLETED = ("COMPLETED", "Completed")
+    CANCELLED = ("CANCELLED", "Cancelled")
+
+
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    is_completed = models.BooleanField(default=False)
+    status = models.CharField(
+        max_length=10, choices=ORDER_STATUS.choices, default=ORDER_STATUS.PLACED
+    )
+    contact_no = PhoneNumberField()
+    address = models.TextField()
     total = models.PositiveIntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
     razorpay_order_id = models.CharField(max_length=22, unique=True)
     objects = models.Manager()
 
     def __str__(self) -> str:
-        return f"Order by :{self.user} createdon:{self.created_on} total:{self.total} completed:{self.is_completed}"
+        return f"Order by :{self.user} createdon:{self.created_on} total:{self.total} status:{self.status}"
 
     class Meta:
         ordering = ["-created_on"]
@@ -125,7 +135,7 @@ class OrderProduct(models.Model):
     objects = models.Manager()
 
     def __str__(self) -> str:
-        return f"Item:{self.item.name} qnty:{self.quantity}"
+        return f"Item:{self.product.name} qnty:{self.quantity}"
 
 
 class Rating(models.Model):

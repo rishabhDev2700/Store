@@ -45,3 +45,7 @@ def logout_user(request):
     logout(request)
     messages.success(request, "Logged out successfully")
     return redirect("accounts:sign_in")
+
+
+def reset_password(request):
+    return render(request, "accounts/reset-form.html")

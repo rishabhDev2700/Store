@@ -1,5 +1,5 @@
-from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseNotAllowed, JsonResponse
+from django.shortcuts import redirect, render, get_object_or_404
 
 from orders.bag import Bag
 from store.models import Order, OrderProduct
@@ -73,12 +73,12 @@ def bag_clear(request):
 
 def view_orders(request):
     all_orders = Order.objects.filter(user=request.user)
-    incompleted = all_orders.filter(is_completed=False)
+    incompleted = all_orders.filter(status="PLACED")
     incompleted_orders = []
     for order in incompleted:
         items = OrderProduct.objects.filter(order=order)
         incompleted_orders.append([order, items])
-    completed = all_orders.filter(is_completed=True)
+    completed = all_orders.filter(status="COMPLETED")
     completed_orders = []
     for order in completed:
         items = OrderProduct.objects.filter(order=order)
@@ -88,3 +88,17 @@ def view_orders(request):
         "incompleted_orders": incompleted_orders,
     }
     return render(request, "orders/view_orders.html", context=context)
+
+
+def save_address(request):
+    if request.method == "POST":
+        address = request.POST.get("address")
+        phone = request.POST.get("phone")
+
+        if not address or not phone:
+            return redirect("your_address_form_page")
+
+        request.session["address"] = address
+        request.session["phone"] = phone
+        return redirect("payment:create_payment")
+    return render(request, "orders/order_address.html")

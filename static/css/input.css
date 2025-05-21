@@ -1,9 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  * {
-    @apply font-raleway;
-  }
+@import "tailwindcss";
+@theme {
+  --font-display: "Raleway";
 }
+@custom-variant dark (&:where(.dark, .dark *));

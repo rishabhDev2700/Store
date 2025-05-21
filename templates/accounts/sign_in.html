@@ -1,18 +1,25 @@
 {%extends 'base.html'%}
 {%block title%}{%endblock%}
+{% include "./../components/sidebar.html" %}
 {%block content%}
-<div class="flex flex-col items-center lg:w-3/5 mx-auto min-h-[60vh]">
-    <h1 class="text-4xl my-8">Sign In</h1>
-    <div class="lg:w-2/5">
-        <form action="{%url 'accounts:sign_in'%}" method="post" class="flex flex-col text-neutral-900">
-            {%csrf_token%}
-            <input class="p-2 m-2 rounded-md" type="text" name="username" id="username-input" placeholder="Username"
-                required>
-            <input class="p-2 m-2 rounded-md" type="password" name="password" id="password-input" placeholder="Password"
-                required>
-            <input class="px-4 py-2 rounded-md mt-4 bg-blue-600 hover:bg-blue-700 text-white w-32 self-center" type="submit"
-                value="Log In">
-        </form>
+
+<div class="md:grid-cols-subgrid col-span-full mx-auto min-h-[60vh] ">
+        <div class="min-h-[30vh] border border-neutral-200 p-8 rounded-2xl shadow-md">
+        <h1 class="text-4xl mb-4 text-neutral-600 text-center">Sign In</h1>
+        <div class="w-full pb-4">
+            <form action="{%url 'accounts:sign_in'%}" method="post"
+                class="text-neutral-900 grid items-center lg:min-w-md">
+                {%csrf_token%}
+                <label for="email">Email</label>
+                <input class="p-2 m-2 rounded-md border border-neutral-400" type="text" name="email" id="email"
+                    placeholder="user@mail.com" required>
+                <label for="password">Password</label>
+                <input class="p-2 m-2 rounded-md border border-neutral-400" type="password" name="password"
+                    id="password" placeholder="*****" required>
+                <input class="px-4 py-2 rounded-md mt-4 bg-blue-600 hover:bg-blue-700 text-white" type="submit"
+                    value="Log In">
+            </form>
+        </div>
     </div>
 </div>
 {%endblock%}

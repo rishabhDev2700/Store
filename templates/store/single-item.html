@@ -1,92 +1,100 @@
 {% extends "../base.html" %}
 {% load static %}
-{% block title %}Product-detail{% endblock %}
+{% block title %}{{ product.title }}{% endblock %}
+
 {% block content %}
 {% include "../components/sidebar.html" %}
-<style>
 
-</style>
-<main class="lg:float-right min-h-[80vh] mx-2 md-w-4/6 lg:w-4/6 lg:mr-12 flex flex-wrap justify-evenly items-start">
-    <div class="flex flex-col md:grid md:grid-cols-1 lg:grid-cols-4 md:gap-x-8">
-        <div class="carousel relative overflow-hidden w-full lg:col-span-2">
-            <div class="carousel-inner relative w-full h-[40vh] md:h-[30vh] lg:h-[50vh]">
-                {% for image in images %}
-                <div class="carousel-item w-full h-full text-center hidden duration-200">
-                    <img src="{{image.image.url}}" alt="Slide 2" class="w-full h-full object-cover">
-                </div>
-                {% endfor %}
+<div class="grid md:col-span-3 lg:col-span-4 xl:col-span-9 grid-cols-1 lg:grid-cols-8 lg:gap-8">
+
+    <!-- Carousel -->
+    <div class="carousel relative col-span-full lg:col-span-3 overflow-hidden">
+        <div class="carousel-inner h-[50vh]">
+            {% for image in images %}
+            <div class="carousel-item hidden w-full h-full text-center">
+                <img src="{{ image.image.url }}" alt="Slide {{ forloop.counter }}"
+                    class="w-full h-full object-contain rounded-2xl" loading="lazy" />
             </div>
-            <button id="prev"
-                class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white opacity-30 hover:opacity-70 duration-200 h-full w-8 lg:w-12 rounded-r-2xl grid items-center justify-center"><svg
-                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="52" height="52" fill="currentColor">
-                    <path
-                        d="M8.36853 12L13.1162 3.03212L14.8838 3.9679L10.6315 12L14.8838 20.0321L13.1162 20.9679L8.36853 12Z">
-                    </path>
-                </svg></button>
-            <button id="next"
-                class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white opacity-30 hover:opacity-70 duration-200 h-full w-8 lg:w-12 rounded-l-2xl grid items-center justify-center"><svg
-                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="52" height="52" fill="currentColor">
-                    <path
-                        d="M15.6315 12L10.8838 3.03212L9.11622 3.9679L13.3685 12L9.11622 20.0321L10.8838 20.9679L15.6315 12Z">
-                    </path>
-                </svg></button>
+            {% endfor %}
+        </div>
+        <!-- Carousel controls -->
+        <button id="prev"
+            class="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-700 text-white opacity-30 hover:opacity-70 h-full w-8 flex items-center justify-center rounded-l-full shadow-md shadow-black/40">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+                <path
+                    d="M8.36853 12L13.1162 3.03212L14.8838 3.9679L10.6315 12L14.8838 20.0321L13.1162 20.9679L8.36853 12Z" />
+            </svg>
+        </button>
+        <button id="next"
+            class="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-700 text-white opacity-30 hover:opacity-70 h-full w-8 flex items-center justify-center rounded-r-full shadow-md shadow-black/40">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+                <path
+                    d="M15.6315 12L10.8838 3.03212L9.11622 3.9679L13.3685 12L9.11622 20.0321L10.8838 20.9679L15.6315 12Z" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Product Info -->
+    <div class="col-span-full lg:col-span-5 flex flex-col text-gray-800 p-4">
+        <h1 class="text-4xl my-4">{{ product.name }}</h1>
+        <hr class="text-gray-300 mb-4" />
+        <h2 class="text-2xl font-bold mb-4">Price: ${{ product.price }}</h2>
+
+        <div class="prose prose-lg max-w-none mb-6">
+            {{ product.description|safe }}
         </div>
 
-        <div class="w-full col-span-1 lg:col-span-2 flex flex-col justify-center">
-            <h1 class="text-4xl my-4">{{product.name}}</h1>
-            <hr />
-            <h2 class="text-2xl font-raleway font-bold my-4">Price: ${{product.price}}</h2>
-            <p class="">{{product.description}}</p>
-        </div>
-        <div class="flex justify-start font-raleway my-4 text-xl col-span-2">
-            <button id="add-button" value="{{product.id}}"
-                class="px-6 py-3 mr-2 rounded-sm bg-gradient-to-tr from-green-700 to-green-500 hover:to-green-800 duration-300 shadow-md shadow-black hover:scale-95 font-bold">
-                Add to the Cart
+        <!-- Add to Cart -->
+        <div class="flex flex-wrap gap-x-1 md:gap-4 items-center justify-end lg:justify-start my-4">
+            <button id="add-button" value="{{ product.id }}"
+                class="px-4 py-3 bg-gradient-to-tr from-green-700 to-green-500 hover:to-green-800 duration-300 shadow-md hover:scale-95 text-white rounded-sm">
+                Add to Cart
             </button>
-            <select
-                class="text-black px-4 rounded-sm bg-gradient-to-tr from-neutral-100 to-neutral-300 hover:to-slate-100 duration-300 shadow-md shadow-black hover:scale-95 font-bold"
-                name="qnty" id="quantity{{product.id}}" value="1">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
+
+            <select name="qnty" id="quantity{{ product.id }}"
+                class="text-black p-4 rounded-sm bg-neutral-200 shadow-md">
+                {% for i in "12345" %}
+                <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                {% endfor %}
             </select>
-            <a href="{%url 'orders:summary'%}"
-                class="px-6 py-3 ml-2 rounded-sm bg-gradient-to-tr from-teal-700 to-teal-500 hover:to-green-800 duration-300 shadow-md shadow-black hover:scale-95 font-bold">
+
+            <a href="{% url 'orders:summary' %}"
+                class="px-4 py-3 bg-gradient-to-tr from-teal-700 to-teal-500 hover:to-teal-800 duration-300 shadow-md hover:scale-95 text-white rounded-sm">
                 Cart
             </a>
         </div>
-        <div class="col-span-4 bg-neutral-800 shadow-inner shadow-black/50">
-            <h2 class="text-5xl mx-2 my-4">Reviews</h2>
-            <div class="flex flex-wrap">
-                {% if not reviews %}
-                <h2 class="text-2xl m-12">No Reviews Yet</h2>
-                {% endif %}
-
-                <!-- start of review -->
-                {%for review in reviews%}
-                <div class="bg-white text-black mb-8 p-4 shadow-md shadow-black border-2 border-black md:w-96 md:mx-2">
-                    <div class="flex justify-between items-start py-2  border-b-2 border-black mb-4">
-                        <h2 class="text-2xl font-bebas">{{review.user.username}}</h2>
-                        <span class="flex items-center justify-center">
-                            <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M23.632 9.201a.628.628 0 0 1-.22.678l-5.726 4.96 1.727 7.394a.606.606 0 0 1-.935.676l-6.503-3.953-6.503 3.953a.713.713 0 0 1-.374.112.57.57 0 0 1-.34-.109.629.629 0 0 1-.222-.679l1.729-7.393L.539 9.879A.607.607 0 0 1 .897 8.78l7.536-.635 2.965-7.083a.62.62 0 0 1 1.155.001l2.965 7.082 7.536.635a.63.63 0 0 1 .578.42z" />
-                                <path fill="none" d="M0 0h24v24H0z" />
-                            </svg>
-                            <span class="px-2 text-2xl font-black">{{review.rating}}</span>
-                        </span>
-                    </div>
-                    <p>
-                        {{review.review}}
-                    </p>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
     </div>
-</main>
+
+    <!-- Reviews -->
+    <div class="col-span-full mb-8 bg-neutral-200 rounded-xl p-4 m-4 shadow-md shadow-black/20">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Reviews</h2>
+
+        {% if not reviews %}
+        <p class="text-lg text-gray-600">No Reviews Yet</p>
+        {% else %}
+        <div class="flex flex-wrap gap-4">
+            {% for review in reviews %}
+            <div class="bg-white text-black p-4 shadow-md border-2 border-black w-full md:w-96">
+                <div class="flex justify-between items-center border-b-2 border-black mb-4">
+                    <h3 class="text-2xl font-bold">{{ review.user.username }}</h3>
+                    <div class="flex items-center">
+                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M23.632 9.201a.628.628 0 0 1-.22.678l-5.726 4.96 1.727 7.394a.606.606 0 0 1-.935.676l-6.503-3.953-6.503 3.953a.713.713 0 0 1-.374.112.57.57 0 0 1-.34-.109.629.629 0 0 1-.222-.679l1.729-7.393L.539 9.879A.607.607 0 0 1 .897 8.78l7.536-.635 2.965-7.083a.62.62 0 0 1 1.155.001l2.965 7.082 7.536.635a.63.63 0 0 1 .578.42z" />
+                        </svg>
+                        <span class="ml-2 text-xl font-black">{{ review.rating }}</span>
+                    </div>
+                </div>
+                <p>{{ review.review }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+
 <script>
     let currentIndex = 0;
     const items = $('.carousel-item');
@@ -123,10 +131,10 @@
             const messageBox = document.getElementById("message-box");
             const messagesList = document.querySelector(".messages");
             const newMessage = document.createElement("li");
-            newMessage.className = "message text-lg px-4 py-2 rounded-md shadow-sm shadow-black/50";
+            newMessage.className = "message text-lg px-4 py-2 rounded-md";
             newMessage.textContent = json.message;
             messagesList.appendChild(newMessage);
-            messageBox.style.display = 'flex';
+            messageBox.classList.add('bottom-12');
             setTimeout(function () {
                 console.log("in the timeout")
                 newMessage.style.display = 'none';

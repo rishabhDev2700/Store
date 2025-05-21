@@ -3,9 +3,9 @@
 {% load static%}
 {% block content %}
 {% include "../components/sidebar.html" %}
-<div class="lg:w-full">
+<div class="md:col-span-3 lg:col-span-4 xl:col-span-9 2xl:col-span-10">
 
-    <h1 class="text-5xl text-center lg:mb-8 py-4">{{category.name}}</h1>
+    <h1 class="text-5xl text-center lg:mb-8 text-neutral-800">{{category.name}}</h1>
 
 
     {% if category.name == "Gaming Consoles"%}
@@ -22,20 +22,11 @@
     <div class="flex flex-col justify-start items-center lg:grid lg:grid-cols-4 mx-auto font-raleway">
         {% for product in products %}
 
-        <a class="m-2 rounded-md bg-neutral-900 flex w-full sm:w-64 min-h-[26rem] lg:w-96 hover:scale-[98%] duration-100 shadow-md hover:shadow-black/90 shadow-black/40"
-            href="{{product.get_absolute_url}}">
-            <div class="flex flex-col">
-                <img class="w-full lg:w-96 object-cover" src="{{product.cover.url}}" alt="">
-                <div class="py-4 px-2 flex flex-col justify-between">
-                    <h2 class="text-2xl my-1">{{product.name}}</h2>
-                    <div class="font-light my-1">{{product.category}}</div>
-                    <div class="font-bold my-1 text-2xl">$ {{product.price}}</div>
-                </div>
-            </div>
-        </a>
+        {% include "./../components/product-card.html" with product=product %}
+
         {% endfor %}
-        {% if not products %}
     </div>
+    {% if not products %}
     <h1 class="text-2xl text-center font-bold my-8">No Products</h1>
     {% endif %}
 </div>

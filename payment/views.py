@@ -59,6 +59,8 @@ def payment_handler(request):
                         user=request.user,
                         total=payment_order.amount,
                         razorpay_order_id=order_id,
+                        address=request.session.get("address"),
+                        contact_no=request.session.get("phone"),
                     )
                     payment_order.order = order
                     payment_order.payment_id = payment_id

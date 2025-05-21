@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+from django.templatetags.static import static
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,19 +30,45 @@ SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = True
-ALLOWED_HOSTS = ["krate.fuzzydevs.com"]
-CSRF_TRUSTED_ORIGINS = ["https://krate.fuzzydevs.com", "http://krate.fuzzydevs.com"]
+DEBUG = env("DEBUG")
+
+ALLOWED_HOSTS = [
+    "store.fuzzydevs.com",
+    "store.therishabhdev.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://store.fuzzydevs.com",
+    "http://store.fuzzydevs.com",
+    "https://store.therishabhdev.com",
+]
+
+if DEBUG:
+    ALLOWED_HOSTS += [
+        "localhost",
+        "127.0.0.1",
+        "0.0.0.0",
+    ]
+
+    CSRF_TRUSTED_ORIGINS += [
+        "http://localhost",
+        "http://127.0.0.1",
+        "http://0.0.0.0",
+    ]
+
 # Application definition
 
 INSTALLED_APPS = [
-    "jazzmin",
+    "daphne",
+    "unfold",
+    "unfold.contrib.forms",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "thumbnails",
     "accounts",
     "orders",
     "store",
@@ -50,17 +77,18 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_tailwind",
     "taggit",
+    "phonenumber_field",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -85,23 +113,29 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
 
 WSGI_APPLICATION = "core.wsgi.application"
+ASGI_APPLICATION = "core.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        #     "ENGINE": "django.db.backends.postgresql",
-        #     "NAME": os.getenv("DB_NAME"),
-        #     "USER": os.getenv("DB_USER"),
-        #     "PASSWORD": os.getenv("DB_PASSWORD"),
-        #     "HOST": os.getenv("DB_HOST"),
-        #     "PORT": os.getenv("DB_PORT"),
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
-
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("PGDATABASE"),
+            "USER": os.getenv("PGUSER"),
+            "PASSWORD": os.getenv("PGPASSWORD"),
+            "HOST": os.getenv("PGHOST"),
+            "PORT": os.getenv("PGPORT"),
+        }
+    }
 AUTH_USER_MODEL = "accounts.User"
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -138,11 +172,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = "collected"
-STATICFILES_DIRS = [BASE_DIR / "static/"]
-MEDIA_URL = "media/"
-MEDIA_ROOT = "media/"
-
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = ["static"]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -152,3 +183,124 @@ LOGOUT_URL = "accounts:logout"
 LOGIN_URL = "accounts:sign_in"
 RAZORPAY_ID = env("RAZORPAY_ID")
 RAZORPAY_SECRET_KEY = env("RAZORPAY_SECRET_KEY")
+STORAGES = {
+    "default": {
+        "BACKEND": "core.storages.PublicMediaStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
+MEDIA_S3_ACCESS_KEY_ID = env("MEDIA_S3_ACCESS_KEY_ID", default=None)
+MEDIA_S3_SECRET_ACCESS_KEY = env("MEDIA_S3_SECRET_ACCESS_KEY", default=None)
+MEDIA_S3_BUCKET_NAME = env("MEDIA_S3_BUCKET_NAME", default=None)
+
+# MEDIA_URL = "media/"
+# MEDIA_ROOT = "media/"
+if not DEBUG:
+    MEDIA_ROOT = "media"
+    MEDIA_HOST = f"{MEDIA_S3_BUCKET_NAME}.s3.amazonaws.com"
+    MEDIA_URL = f"https://{MEDIA_HOST}/"
+
+MEDIA_ROOT = "media"
+MEDIA_HOST = f"{MEDIA_S3_BUCKET_NAME}.s3.amazonaws.com"
+MEDIA_URL = f"https://{MEDIA_HOST}/"
+
+
+UNFOLD = {
+    "STYLES": [
+        lambda request: static("css/styles.css"),
+    ],
+}
+
+
+THUMBNAILS = {
+    "METADATA": {
+        "BACKEND": "thumbnails.backends.metadata.DatabaseBackend",
+    },
+    "STORAGE": {
+        "BACKEND": "core.storages.PublicMediaStorage",
+        # You can also use Amazon S3 or any other Django storage backends
+    },
+    "SIZES": {
+        "large": {
+            "PROCESSORS": [
+                {"PATH": "thumbnails.processors.resize", "width": 300, "height": 550},
+                {"PATH": "thumbnails.processors.flip", "direction": "horizontal"},
+            ],
+        },
+        # "watermarked": {
+        #     "PROCESSORS": [
+        #         {"PATH": "thumbnails.processors.resize", "width": 20, "height": 20},
+        #         # Only supports PNG. File must be of the same size with thumbnail (20 x 20 in this case)
+        #         {
+        #             "PATH": "thumbnails.processors.add_watermark",
+        #             "watermark_path": "watermark.png",
+        #         },
+        #     ],
+        # },
+    },
+}
+
+
+from django.templatetags.static import static
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
+
+UNFOLD = {
+    "SITE_TITLE": "Store Admin",
+    "SITE_HEADER": "Store Admin",
+    "SITE_SUBHEADER": "The Rishabhdev Store",
+    "SITE_DROPDOWN": [
+        {
+            "icon": "diamond",
+            "title": _("Store Admin"),
+            "link": "https://store.therishabhdev.com",
+        },
+        # ...
+    ],
+    "SITE_URL": "/",
+    # "SITE_ICON": lambda request: static("icon.svg"),  # both modes, optimise for 32px height
+    "SITE_ICON": {
+        "light": lambda request: static("favicon.svg"),  # light mode
+        "dark": lambda request: static("favicon.svg"),  # dark mode
+    },
+    "SITE_LOGO": lambda request: static(
+        "favicon.svg"
+    ),  # both modes, optimise for 32px height
+    "SITE_SYMBOL": "speed",  # symbol from icon set
+    "SITE_FAVICONS": [
+        {
+            "rel": "icon",
+            "sizes": "32x32",
+            "type": "image/svg+xml",
+            "href": lambda request: static("favicon.svg"),
+        },
+    ],
+    "SHOW_HISTORY": True,  # show/hide "History" button, default: True
+    "SHOW_VIEW_ON_SITE": True,  # show/hide "View on site" button, default: True
+    "SHOW_BACK_BUTTON": False,  # show/hide "Back" button on changeform in header, default: False
+    "DASHBOARD_CALLBACK": "store.admin.admin_dashboard",
+    "LOGIN": {
+        "image": lambda request: static("assets/admin-login-bg.jpg"),
+    },
+    "STYLES": [
+        lambda request: static("css/style.css"),
+    ],
+    "SCRIPTS": [
+        lambda request: static("js/script.js"),
+    ],
+    "BORDER_RADIUS": "6px",
+    "EXTENSIONS": {
+        "modeltranslation": {
+            "flags": {
+                "en": "🇬🇧",
+                "fr": "🇫🇷",
+                "nl": "🇧🇪",
+            },
+        },
+    },
+    "SIDEBAR": {
+        "SHOW_ITEMS": True,
+    },
+}

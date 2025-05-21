@@ -1,5 +1,5 @@
-<footer class="w-full h-[40vh] lg:h-[30vh] flex flex-col justify-between items-center font-raleway font-extralight">
-    <ul class="grid grid-cols-2 lg:grid-cols-3 text-center mt-12">
+<footer class=" flex flex-col gap-y-4 justify-between items-center font-extralight bg-neutral-800 text-neutral-200">
+    <ul class="grid grid-cols-2 lg:grid-cols-3 text-center mt-4">
         <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200"
             href="{% url 'store:explore' %}">Explore</a>
         <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200"
@@ -13,10 +13,10 @@
         <a class="py-1 my-1 lg:mx-24 hover:text-amber-300 hover:underline duration-200"
             href="{% url 'store:terms' %}">Terms and Conditions</a>
     </ul>
-    <div class="animate-pulse font-light">built by Rishabhdev2700 from Fuzzydevs.</div>
-    <div class="pb-4 text-slate-300 text-sm">
+    <div class="animate-pulse font-light text-xs">built by <a class="text-amber-300 underline"
+            href="https://therishabhdev.components" target="_blank">Rishabhdev</a></div>
+    <div class="text-slate-300 text-xs pb-4">
         <span class="lg:mx-12">Copyright 2024.</span>
         <span class="lg:mx-12">All Rights Reserved</span>
-
     </div>
 </footer>

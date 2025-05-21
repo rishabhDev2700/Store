@@ -28,15 +28,15 @@
   <title>{% block title %}{% endblock title %}</title>
 </head>
 
-<body class="text-white bg-neutral-900/95 font-megrim">
+<body class="text-white antialiased">
   {% include "./components/navigation.html" %}
-  <main class="flex flex-col lg:flex-row items-start justify-center px-2 pt-24">
+  <main class="grid md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-12 items-start content-center px-2 pt-24 gap-12">
     {% block content %} {% endblock%}
   </main>
-  <div class="fixed flex justify-between bottom-12 right-12 bg-white text-black w-64" id="message-box">
+  <div class="fixed flex justify-between bottom-8 right-12 bg-white text-black" id="message-box">
     <ul class="messages">
       {% for message in messages %}
-      <li class="message text-lg px-4 py-2 rounded-md shadow-sm shadow-black/50">{{ message }}</li>
+      <li class="message text-lg px-4 py-2 rounded-md">{{ message }}</li>
       {% endfor %}
     </ul>
 

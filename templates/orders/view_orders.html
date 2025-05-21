@@ -1,71 +1,155 @@
-{%extends 'base.html'%}
-{%block title%}Orders{%endblock%}
-{%block content%}
-<div class="bag-summary">
-  <div class="row">
-    <h2 class="title">Your Orders</h2>
-    </div>
-    <div class="orders">
-        <h3 class="title">Incomplete Orders</h3>
-        <hr>
-        {% for order in incompleted_orders %}
-        <div id="{{order.0.id}}">
-            <h3 class="id">Order ID:{{order.0.id}}</h3>
-            <table>
-                <tr>
-                <th class="name">Item</th>
-                <th class="qnty">Qnty</th>
-                <th class="price">Price</th>
-                </tr>
-                {%for item in order.1 %}
-                <tr>
-                    <td class="name">{{item.item.name}}</td>
-                    <td class="qnty">{{item.quantity}}</td>
-                    <td class="price">{{item.price}}</td>
-                </tr>
-                {%endfor%}
-            </table>
-            <hr>          
-            <h2>Total:  Rs. {{order.0.total}}</h2>
-            <hr>
-            <br>
-        </div>
-        {% endfor %}
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <h3 class="title">Completed Orders</h3>
-        <hr>
-        {% for order in completed_orders %}
-        <div id="{{order.0.id}}">
-            <h3 class="id">Order ID:{{order.0.id}}</h3>
-            <table>
-                <tr>
-                <th class="name">Item</th>
-                <th class="qnty">Qnty</th>
-                <th class="price">Price</th>
-                </tr>
-                {%for item in order.1 %}
-                <tr>
-                    <td class="name">{{item.item.name}}</td>
-                    <td class="qnty">{{item.quantity}}</td>
-                    <td class="price">{{item.price}}</td>
-                </tr>
-                {%endfor%}
-            </table>          
-            <hr>          
-            <h2>Total:  Rs. {{order.0.total}}</h2>
-            <hr>
-            <br>        
-        </div>
-        {% endfor %}
-        <hr>
-       
+{% extends 'base.html' %}
+{% block title %}Orders{% endblock %}
+{% block content %}
+{% include "./../components/sidebar.html" %}
+<div class="md:col-span-3 xl:col-span-7 grid-cols-subgrid place-items-center">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Your Orders</h1>
+        <p class="text-gray-600">Track and manage your order history</p>
     </div>
 
+    <!-- Incomplete Orders Section -->
+    <div class="mb-12">
+        <div class="flex items-center mb-6">
+            <h2 class="text-2xl font-semibold text-gray-800">Incomplete Orders</h2>
+            <span class="ml-3 px-3 py-1 bg-orange-100 text-orange-800 text-sm font-medium rounded-full">
+                {{ incompleted_orders|length }}
+            </span>
+        </div>
+
+        {% if incompleted_orders %}
+        <div class="space-y-6 w-2xl">
+            {% for order in incompleted_orders %}
+            <div
+                class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                <!-- Order Header -->
+                <div class="bg-orange-50 px-6 py-4 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg font-semibold text-gray-900">
+                            Order #{{ order.0.id }}
+                        </h3>
+                        <span class="px-3 py-1 bg-orange-500 text-white text-sm font-medium rounded-full">
+                            Pending
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Order Items Table -->
+                <div class="p-6 w-full">
+                    <div class="overflow-x-auto">
+                        <table class="w-full table-auto">
+                            <thead>
+                                <tr class="border-b border-gray-200">
+                                    <th class="text-left py-3 px-4 font-semibold text-gray-700">Item</th>
+                                    <th class="text-center py-3 px-4 font-semibold text-gray-700">Quantity</th>
+                                    <th class="text-right py-3 px-4 font-semibold text-gray-700">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                {% for item in order.1 %}
+                                <tr class="hover:bg-gray-50">
+                                    <td class="py-3 px-4 text-gray-900">{{ item.product.name }}</td>
+                                    <td class="py-3 px-4 text-center text-gray-600">{{ item.quantity }}</td>
+                                    <td class="py-3 px-4 text-right font-medium text-gray-900">₹{{ item.price }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Order Total -->
+                    <div class="mt-6 pt-4 border-t border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-semibold text-gray-900">Total:</span>
+                            <span class="text-xl font-bold text-green-600">₹{{ order.0.total }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-12 bg-gray-50 rounded-lg">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <p class="mt-4 text-gray-500">No incomplete orders found</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Completed Orders Section -->
+    <div class="mb-12">
+        <div class="flex items-center mb-6">
+            <h2 class="text-2xl font-semibold text-gray-800">Completed Orders</h2>
+            <span class="ml-3 px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                {{ completed_orders|length }}
+            </span>
+        </div>
+
+        {% if completed_orders %}
+        <div class="space-y-6 w-2xl">
+            {% for order in completed_orders %}
+            <div
+                class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                <!-- Order Header -->
+                <div class="bg-green-50 px-6 py-4 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg font-semibold text-gray-900">
+                            Order #{{ order.0.id }}
+                        </h3>
+                        <span class="px-3 py-1 bg-green-500 text-white text-sm font-medium rounded-full">
+                            Completed
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Order Items Table -->
+                <div class="p-6">
+                    <div class="overflow-x-auto">
+                        <table class="w-full table-auto">
+                            <thead>
+                                <tr class="border-b border-gray-200">
+                                    <th class="text-left py-3 px-4 font-semibold text-gray-700">Item</th>
+                                    <th class="text-center py-3 px-4 font-semibold text-gray-700">Quantity</th>
+                                    <th class="text-right py-3 px-4 font-semibold text-gray-700">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                {% for item in order.1 %}
+                                <tr class="hover:bg-gray-50">
+                                    <td class="py-3 px-4 text-gray-900">{{ item.item.name }}</td>
+                                    <td class="py-3 px-4 text-center text-gray-600">{{ item.quantity }}</td>
+                                    <td class="py-3 px-4 text-right font-medium text-gray-900">₹{{ item.price }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Order Total -->
+                    <div class="mt-6 pt-4 border-t border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-semibold text-gray-900">Total:</span>
+                            <span class="text-xl font-bold text-green-600">₹{{ order.0.total }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-12 bg-gray-50 rounded-lg">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p class="mt-4 text-gray-500">No completed orders found</p>
+        </div>
+        {% endif %}
+    </div>
 </div>
 
-{%endblock%}
+{% endblock %}

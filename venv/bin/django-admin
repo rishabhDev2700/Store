@@ -1,4 +1,4 @@
-#!/home/rishabhdev/code/Bakery/E-comm/venv/bin/python3
+#!/home/rishabhdev/projects/Store/venv/bin/python3.13
 # -*- coding: utf-8 -*-
 import re
 import sys

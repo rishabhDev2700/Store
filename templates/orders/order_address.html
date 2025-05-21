@@ -1,0 +1,66 @@
+{%extends 'base.html'%}
+{%block title%}Order Address{%endblock%}
+{% block content %}
+<div class="col-span-4 md:col-start-1 lg:col-start-2 xl:col-start-5 grid-cols-subgrid min-h-[70vh] mx-12">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">The Store</h1>
+
+    <div class="text-lg text-gray-600 mb-8 leading-relaxed">
+        Delivery Address and Contact details
+    </div>
+
+    <form method="post" action="{% url 'orders:save_address' %}"
+        class="space-y-4 py-4 px-2 border-2 border-gray-100 rounded-2xl shadow-md shadow-black/20 text-gray-800">
+        {% csrf_token %}
+
+        <div>
+            <label for="address" class="block text-gray-700 font-semibold mb-1">Delivery Address</label>
+            <textarea name="address" id="address" rows="3" required
+                class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+        </div>
+
+        <div>
+            <label for="phone" class="block text-gray-700 font-semibold mb-1">Phone Number</label>
+            <input type="tel" name="phone" id="phone" required
+                class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+        </div>
+
+        <button type="submit"
+            class="w-full px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg rounded-lg hover:shadow-xl shadow-md shadow-black/20 transform hover:scale-[0.98] transition-all duration-200 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300 active:scale-95">
+            Save Address & Continue to Payment
+        </button>
+
+    </form>
+    <button type="button" onclick="fetchAddressFromLocation()" class="text-sm text-blue-600 hover:underline">
+        Use my current location
+    </button>
+</div>
+<script>
+    function fetchAddressFromLocation() {
+        if (!navigator.geolocation) {
+            alert("Geolocation is not supported by your browser");
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(success, error);
+
+        function success(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            // Reverse geocoding
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+                .then(response => response.json())
+                .then(data => {
+                    const address = data.display_name;
+                    document.getElementById("address").value = address;
+                })
+                .catch(() => alert("Failed to fetch address from location."));
+        }
+
+        function error(e) {
+            alert("Unable to retrieve your location.", e);
+        }
+    }
+</script>
+
+{% endblock %}
