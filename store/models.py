@@ -13,6 +13,7 @@ from uuid import uuid4
 from thumbnails.fields import ImageField
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 # Create your models here.
 class Category(models.Model):
     """Category model for categorizing products"""

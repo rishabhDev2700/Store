@@ -4,3 +4,4 @@ collected
 */__pycache__/
 # media/*
 venv/
+node_modules/
