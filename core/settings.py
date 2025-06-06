@@ -186,25 +186,27 @@ RAZORPAY_ID = env("RAZORPAY_ID")
 RAZORPAY_SECRET_KEY = env("RAZORPAY_SECRET_KEY")
 STORAGES = {
     "default": {
-        "BACKEND": "core.storages.PublicMediaStorage",
+        # "BACKEND": "core.storages.PublicMediaStorage",
+        "BACKEND": "storages.backends.s3.S3Storage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
-MEDIA_S3_ACCESS_KEY_ID = env("MEDIA_S3_ACCESS_KEY_ID", default=None)
-MEDIA_S3_SECRET_ACCESS_KEY = env("MEDIA_S3_SECRET_ACCESS_KEY", default=None)
-MEDIA_S3_BUCKET_NAME = env("MEDIA_S3_BUCKET_NAME", default=None)
-
+AWS_S3_ACCESS_KEY_ID = env("AWS_S3_ACCESS_KEY_ID", default=None)
+AWS_S3_SECRET_ACCESS_KEY = env("AWS_S3_SECRET_ACCESS_KEY", default=None)
+AWS_S3_BUCKET_NAME = env("AWS_S3_BUCKET_NAME", default=None)
+AWS_S3_ADDRESSING_STYLE = "virtual"
+AWS_S3_REGION_NAME = "eu-north-1"
 # MEDIA_URL = "media/"
 # MEDIA_ROOT = "media/"
 if not DEBUG:
     MEDIA_ROOT = "media"
-    MEDIA_HOST = f"{MEDIA_S3_BUCKET_NAME}.s3.amazonaws.com"
+    MEDIA_HOST = f"{AWS_S3_BUCKET_NAME}.s3.amazonaws.com"
     MEDIA_URL = f"https://{MEDIA_HOST}/"
 
 MEDIA_ROOT = "media"
-MEDIA_HOST = f"{MEDIA_S3_BUCKET_NAME}.s3.amazonaws.com"
+MEDIA_HOST = f"{AWS_S3_BUCKET_NAME}.s3.amazonaws.com"
 MEDIA_URL = f"https://{MEDIA_HOST}/"
 
 
@@ -220,7 +222,8 @@ THUMBNAILS = {
         "BACKEND": "thumbnails.backends.metadata.DatabaseBackend",
     },
     "STORAGE": {
-        "BACKEND": "core.storages.PublicMediaStorage",
+        # "BACKEND": "core.storages.PublicMediaStorage",
+        "BACKEND": "storages.backends.s3.S3Storage",
         # You can also use Amazon S3 or any other Django storage backends
     },
     "SIZES": {
@@ -245,13 +248,12 @@ THUMBNAILS = {
 
 
 from django.templatetags.static import static
-from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 UNFOLD = {
     "SITE_TITLE": "Store Admin",
     "SITE_HEADER": "Store Admin",
-    "SITE_SUBHEADER": "The Rishabhdev Store",
+    "SITE_SUBHEADER": "The Store admin",
     "SITE_DROPDOWN": [
         {
             "icon": "diamond",
@@ -286,7 +288,7 @@ UNFOLD = {
         "image": lambda request: static("assets/admin-login-bg.jpg"),
     },
     "STYLES": [
-        lambda request: static("css/style.css"),
+        lambda request: static("css/styles.css"),
     ],
     "SCRIPTS": [
         lambda request: static("js/script.js"),

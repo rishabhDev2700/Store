@@ -11,9 +11,7 @@
 
     <div class="flex flex-col items-center justify-start md:grid md:grid-cols-2 xl:grid-cols-4 mx-auto gap-x-2">
         {% for category in categories %}
-
         {% include "./../components/category-card.html" with category=category %}
-
         {% endfor %}
     </div>
 </div>

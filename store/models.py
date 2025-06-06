@@ -18,10 +18,10 @@ from phonenumber_field.modelfields import PhoneNumberField
 class Category(models.Model):
     """Category model for categorizing products"""
 
-    cover = ImageField(upload_to="covers/")
+    cover = ImageField(upload_to="covers/", null=True)
     name = models.CharField(max_length=80)
     description = models.TextField()
-    slug = models.SlugField(blank=False, unique=True, max_length=30)
+    slug = models.SlugField(blank=False, unique=True, max_length=80)
     objects = models.Manager()
 
     class Meta:
@@ -59,7 +59,7 @@ class Product(models.Model):
     description = models.TextField()
     slug = models.SlugField(blank=False, unique=True, max_length=30)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    price = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     date_added = models.DateField(auto_now=True)
     is_available = models.BooleanField(default=True)
     cover = ImageField(upload_to=path_and_rename, null=True)
@@ -132,7 +132,7 @@ class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField()
-    price = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     objects = models.Manager()
 
     def __str__(self) -> str:

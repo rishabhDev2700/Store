@@ -7,18 +7,6 @@
 
     <h1 class="text-5xl text-center lg:mb-8 text-neutral-800">{{category.name}}</h1>
 
-
-    {% if category.name == "Gaming Consoles"%}
-    <div>
-        <img class="h-[40vh] lg:h[50vh] w-screen object-cover object-center"
-            src="https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/74136d127668593.6146cbae0c869.jpg">
-    </div>
-    {% elif category.name == "Laptops"%}
-    <img class="h-[40vh] lg:h-[50vh] w-full object-cover object-center" src="{%static 'assets/laptop-large.jpg'%}">
-    {% elif category.name == "Smartphones" %}
-    <img class="h-[40vh] w-full object-cover object-top lg:hidden" src="{%static 'assets/mobile-iphone-15.jpg'%}">
-    <img class="h-[50vh] w-full object-cover hidden lg:block" src="{%static 'assets/iphone15-banner.jpg'%}">
-    {%endif%}
     <div class="flex flex-col justify-start items-center lg:grid lg:grid-cols-4 mx-auto font-raleway">
         {% for product in products %}
 

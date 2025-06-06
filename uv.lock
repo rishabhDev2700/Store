@@ -383,6 +383,11 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/1f/21/3cedee63417bc5553eed0c204be478071c9ab208e5e259e97287590194f1/django_storages-1.14.6-py3-none-any.whl", hash = "sha256:11b7b6200e1cb5ffcd9962bd3673a39c7d6a6109e8096f0e03d46fab3d3aabd9", size = 33095 },
 ]
 
+[package.optional-dependencies]
+s3 = [
+    { name = "boto3" },
+]
+
 [[package]]
 name = "django-taggit"
 version = "6.1.0"
@@ -724,7 +729,7 @@ dependencies = [
     { name = "django-crispy-forms" },
     { name = "django-environ" },
     { name = "django-phonenumber-field", extra = ["phonenumbers"] },
-    { name = "django-storages" },
+    { name = "django-storages", extra = ["s3"] },
     { name = "django-taggit" },
     { name = "django-thumbnails" },
     { name = "django-unfold" },
@@ -743,7 +748,7 @@ requires-dist = [
     { name = "django-crispy-forms", specifier = ">=2.4" },
     { name = "django-environ", specifier = ">=0.12.0" },
     { name = "django-phonenumber-field", extras = ["phonenumbers"], specifier = ">=8.1.0" },
-    { name = "django-storages", specifier = ">=1.14.6" },
+    { name = "django-storages", extras = ["s3"], specifier = ">=1.14.6" },
     { name = "django-taggit", specifier = ">=6.1.0" },
     { name = "django-thumbnails", specifier = ">=0.8.0" },
     { name = "django-unfold", specifier = ">=0.59.0" },
