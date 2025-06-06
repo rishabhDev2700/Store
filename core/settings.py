@@ -30,7 +30,7 @@ SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = env("DEBUG")
+DEBUG = env("DEBUG", bool, False)
 
 ALLOWED_HOSTS = [
     "store.fuzzydevs.com",
@@ -136,6 +136,7 @@ else:
             "PORT": os.getenv("PGPORT"),
         }
     }
+
 AUTH_USER_MODEL = "accounts.User"
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
