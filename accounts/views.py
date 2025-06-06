@@ -25,7 +25,7 @@ def sign_up(request):
 
 def sign_in(request):
     if request.method == "POST":
-        username = request.POST["username"]
+        username = request.POST["email"]
         password = request.POST["password"]
         user = authenticate(username=username, password=password)
         if user is not None:
