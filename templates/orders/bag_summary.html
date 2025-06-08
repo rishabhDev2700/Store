@@ -3,58 +3,103 @@
 {%block content%}
 {% include '../components/sidebar.html'%}
 
-<div class="md:col-span-3 lg:col-span-4 xl:col-span-9 2xl:col-span-10">
-  <div class="text-center flex flex-col items-center">
-    <h2 class="text-3xl my-4 font-bold">Your Bag</h2>
-    {% if bag %}
-    <button id="clear-button"
-      class="bg-red-500 hover:bg-red-700 text-white p-2 m-2 w-64 rounded-xl shadow-md shadow-black/20 duration-200">
-      Clear Bag
-    </button>
-    {% endif %}
+<div class="md:col-span-3 lg:col-span-4 xl:col-span-9 2xl:col-span-10 min-h-[80vh]">
+  <div class="text-center mb-8">
+    <div class="max-w-xl mx-auto px-4">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+        Your Shopping Bag
+      </h2>
+
+      {% if bag %}
+      <button id="clear-button"
+        class="inline-flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+          </path>
+        </svg>
+        Clear Bag
+      </button>
+      {% endif %}
+    </div>
   </div>
   <div class="flex flex-col justify-start items-center text-gray-800">
     {% for item in bag %}
-    {%with product=item.item%}
-    <div data-index="{{product.id}}" id="{{product.id}}"
-      class="bag-item border border-gray-300 text-gray-800 shadow-md shadow-black/20 rounded-xl flex flex-col lg:flex-row justify-between lg:w-5/6  mt-8">
-      <img class="w-32 h-full object-cover" src="{{product.cover.url}}" alt="">
-      <div class="text-3xl self-center">{{product.name}}</div>
-      <div class="flex flex-col items-center justify-evenly pr-8">
-        <div class="flex flex-col">
-          <div class="bag-item-data">Price: {{product.price}}</div>
+    {%with product=item%}
+    <div data-index="{{product.id}}" id="variant-{{product.variant.id}}"
+      class="bag-item bg-white border border-gray-200 shadow-lg rounded-2xl overflow-hidden transition-shadow duration-300 hover:shadow-xl w-full max-w-4xl mx-auto mb-6">
+
+      <div class="flex flex-col md:flex-row">
+
+        <div class="flex-shrink-0 m-4">
+          <img class="w-full h-48 md:w-48 md:h-full object-contain md:object-cover"
+            src="{% if product.variant.images %}{{ product.variant.images.all.0.image.url }}{% else %}https://placehold.co/800x600?text=Category{% endif %}"
+            alt="{{product.variant.product.name}}" loading="lazy">
         </div>
-        <div class="flex p-2">
-          <div class="flex items-start justify-between">
-            <label for="quantity{{product.id}}">Qnty</label>
-            <select class="text-black p-2 border-2 border-gray-300 mx-4 rounded-xl" name="quantity"
-              id="quantity{{product.id}}">
-              <option value="{{item.quantity}}" selected hidden>{{item.quantity}}</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-            </select>
+
+        <div class="flex-1 p-6 flex flex-col justify-between">
+
+
+          <div class="mb-4">
+            <h3 class="text-xl md:text-2xl font-semibold text-gray-900 mb-3 leading-tight">
+              {{product.variant.product.name}}
+            </h3>
+
+            <div class="text-2xl font-bold text-gray-900 mb-3">
+              Rs.{{product.price}}
+            </div>
+
+            {% if product.variant.attributes.all %}
+            <div class="flex flex-wrap gap-2 mb-4">
+              {% for attr in product.variant.attributes.all %}
+              <span
+                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                {{attr}}
+              </span>
+              {% endfor %}
+            </div>
+            {% endif %}
           </div>
 
-        </div>
-        <div class="flex mb-4">
-          <button id="update-button"
-            class="bg-green-500 text-white hover:bg-green-700 rounded-xl text-center mt-4 mx-1 px-3 py-2"
-            data-index="{{product.id}}">
-            Update
-          </button>
-          <button id="remove-button"
-            class="bg-red-500 text-white hover:bg-red-700 rounded-xl text-center mt-4 mx-1 px-3 py-2"
-            data-index="{{product.id}}">
-            Remove
-          </button>
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
+            <div class="flex items-center space-x-3">
+              <label for="quantity{{product.id}}" class="text-sm font-medium text-gray-700">
+                Quantity:
+              </label>
+              <select
+                class="block w-20 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                name="quantity" id="quantity{{product.variant.id}}">
+                <option value="{{item.quantity}}" selected>{{item.quantity}}</option>
+                {% for i in "12345" %}
+                <option value="{{i}}">{{i}}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="flex space-x-3">
+              <button id="update-button"
+                class="update-button inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                data-index="{{product.variant.id}}">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                  </path>
+                </svg>
+                Update
+              </button>
+              <button id="remove-button"
+                class="remove-button inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                data-index="{{product.variant.id}}">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                  </path>
+                </svg>
+                Remove
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -66,17 +111,12 @@
       shopping</a>
     {% endif %}
     <div class="flex flex-col md:flex-row gap-4 justify-center items-center my-8">
-      <div class="text-xl">Total Amount:<span class="font-semibold"> ₹{{bag.get_subtotal}}</span></div>
-      <div class="text-lg">Total Items: <span class="font-semibold">{{quantity}}</span></div>
+      <div class="text-xl">Total Amount:<span class="font-semibold" id="subtotal"> ₹{{bag.get_subtotal}}</span></div>
+      <div class="text-lg">Total Items: <span class="font-semibold" id="bag-quantity">{{quantity}}</span></div>
     </div>
 
     {%if user.is_authenticated and bag %}
-    <!-- <a href="{%url 'payment:create_payment'%}"
-      class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-xl shadow-md transition duration-200">
-      Proceed to Payment
-    </a> -->
-
-    <a href="{%url 'orders:save_address'%}"
+    <a id="proceed-button" href="{%url 'orders:save_address'%}"
       class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-xl shadow-md transition duration-200">
       Proceed to place order
     </a>
@@ -86,27 +126,28 @@
 </div>
 
 <script>
+  const updateUrl = "{% url 'orders:bag_update' %}";
+  const deleteUrl = "{% url 'orders:bag_delete' %}";
+  const clearUrl = "{%url 'orders:bag_clear'%}"
   //<!--delete-->
-  console.log("This is from summary")
-  $("#remove-button").click(function (e) {
+  $(document).on("click", ".remove-button", function (e) {
     e.preventDefault();
     var item_id = $(this).data("index");
     $.ajax({
       type: "POST",
-      url: '{% url "orders:bag_delete" %}',
+      url: deleteUrl,
       data: {
         item_id: $(this).data("index"),
         csrfmiddlewaretoken: "{{csrf_token}}",
         action: "post",
       },
       success: function (json) {
-        $('#' + item_id).remove();
+        $('#variant-' + item_id).remove();
         if (json.quantity == 0) {
           subtotal = 0
         } else {
           subtotal = json.subtotal
         }
-        console.log('inserting message')
         const messageBox = document.getElementById("message-box");
         const messagesList = document.querySelector(".messages");
         const newMessage = document.createElement("li");
@@ -115,7 +156,7 @@
         messagesList.appendChild(newMessage);
         messageBox.style.display = 'flex';
         $("#bag-quantity").replaceWith(json.quantity);
-        $("#subtotal").replaceWith(json.subtotal);
+        $("#subtotal").replaceWith(subtotal);
         setTimeout(function () {
           console.log("in the timeout")
           newMessage.style.display = 'none';
@@ -127,12 +168,13 @@
 
   //<!--update-->
 
-  $("#update-button").click(function (e) {
+  $(document).on("click", ".update-button", function (e) {
     e.preventDefault();
     var item_id = $(this).data("index");
+    console.log(`Quantity:${$("#quantity" + item_id + " option:selected").text()} Id:${item_id}`)
     $.ajax({
       type: "POST",
-      url: '{% url "orders:bag_update" %}',
+      url: updateUrl,
       data: {
         item_id: $(this).data("index"),
         quantity: $("#quantity" + item_id + " option:selected").text(),
@@ -147,8 +189,8 @@
         newMessage.textContent = json.message;
         messagesList.appendChild(newMessage);
         messageBox.style.display = 'flex';
-        $("#bag-quantity").replaceWith(json.quantity);
-        $("#subtotal").replaceWith(json.subtotal);
+        $("#bag-quantity").html(json.quantity);
+        $("#subtotal").html(json.subtotal);
         setTimeout(function () {
           console.log("in the timeout")
           newMessage.style.display = 'none';
@@ -162,7 +204,7 @@
   //<!--clear bag-->
   $("#clear-button").click(function (e) {
     $.ajax({
-      url: "{%url 'orders:bag_clear'%}",
+      url: clearUrl,
       type: 'GET',
       success: function (json) {
         console.log(json.message)
@@ -180,6 +222,7 @@
           console.log("in the timeout")
           newMessage.style.display = 'none';
         }, 2000);
+        $("#proceed-button").addClass("hidden")
       },
       error: function (xhr, errmsg, err) { },
     });

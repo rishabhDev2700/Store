@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ValidationError
 
 # Create your models here.
 """This file contains the store models like product, category,etc. """
@@ -14,11 +15,40 @@ from thumbnails.fields import ImageField
 from phonenumber_field.modelfields import PhoneNumberField
 
 
-# Create your models here.
+def path_and_rename(instance, filename):
+    upload_to = "products/"
+    ext = filename.split(".")[-1]
+    # get filename
+    if instance.pk:
+        filename = "{}.{}".format(instance.pk, ext)
+    else:
+        # set filename as random string
+        filename = "{}.{}".format(uuid4().hex, ext)
+    # return the whole path to the file
+    return os.path.join(upload_to, filename)
+
+
+class ProductAttribute(models.Model):
+    name = models.CharField(max_length=50, unique=True)  # e.g. Size, Color, RAM
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.name
+
+
+class ProductAttributeValue(models.Model):
+    attribute = models.ForeignKey(ProductAttribute, on_delete=models.CASCADE)
+    value = models.CharField(max_length=50)  # e.g. M, Red, 6GB, 128GB
+    objects = models.Manager()
+
+    def __str__(self):
+        return f"{self.attribute.name}: {self.value}"
+
+
 class Category(models.Model):
     """Category model for categorizing products"""
 
-    cover = ImageField(upload_to="covers/", null=True)
+    cover = ImageField(upload_to="covers/", null=True, blank=True)
     name = models.CharField(max_length=80)
     description = models.TextField()
     slug = models.SlugField(blank=False, unique=True, max_length=80)
@@ -39,19 +69,6 @@ class Category(models.Model):
         return reverse("store:show-category", args=[self.slug])
 
 
-def path_and_rename(instance, filename):
-    upload_to = "products/"
-    ext = filename.split(".")[-1]
-    # get filename
-    if instance.pk:
-        filename = "{}.{}".format(instance.pk, ext)
-    else:
-        # set filename as random string
-        filename = "{}.{}".format(uuid4().hex, ext)
-    # return the whole path to the file
-    return os.path.join(upload_to, filename)
-
-
 class Product(models.Model):
     """Product model"""
 
@@ -59,10 +76,10 @@ class Product(models.Model):
     description = models.TextField()
     slug = models.SlugField(blank=False, unique=True, max_length=30)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    date_added = models.DateField(auto_now=True)
+    price = models.IntegerField()
+    date_added = models.DateField(auto_now_add=True)
     is_available = models.BooleanField(default=True)
-    cover = ImageField(upload_to=path_and_rename, null=True)
+    cover = ImageField(upload_to=path_and_rename, null=True, blank=True)
     tags = TaggableManager()
     objects = models.Manager()
 
@@ -81,16 +98,35 @@ class Product(models.Model):
         return reverse("store:show-product", args=[self.slug])
 
 
-class ProductImage(models.Model):
-    """Product image to store image information"""
-
-    name = models.CharField(max_length=40)
-    image = models.ImageField(upload_to="media/")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+class ProductVariant(models.Model):
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="variants"
+    )
+    attributes = models.ManyToManyField(
+        ProductAttributeValue, related_name="attributes"
+    )
+    sku = models.CharField(max_length=50, unique=True)  # Stock Keeping Unit
+    price = models.IntegerField()
+    stock = models.PositiveIntegerField(default=0)
+    is_available = models.BooleanField(default=True)
     objects = models.Manager()
 
     def __str__(self):
-        return str(self.name)
+        return f"{self.product.name}"
+
+
+class ProductVariantImage(models.Model):
+    """Product image to store image information"""
+
+    image = models.ImageField(upload_to="variants/")
+    variant = models.ForeignKey(
+        ProductVariant, on_delete=models.CASCADE, related_name="images"
+    )
+    alt_text = models.CharField(max_length=100, blank=True)
+    objects = models.Manager()
+
+    def __str__(self):
+        return str(self.image.url)
 
 
 class Discount(models.Model):
@@ -130,13 +166,13 @@ class Order(models.Model):
 
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(ProductVariant, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.IntegerField()
     objects = models.Manager()
 
     def __str__(self) -> str:
-        return f"Item:{self.product.name} qnty:{self.quantity}"
+        return f"Item:{self.product.product.name} qnty:{self.quantity}"
 
 
 class Rating(models.Model):

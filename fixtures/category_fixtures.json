@@ -1,0 +1,52 @@
+[
+    {
+        "model": "store.category",
+        "pk": 1,
+        "fields": {
+            "cover": "https://placehold.co/800x600?text=Clothing",
+            "name": "Clothing",
+            "description": "Apparel and fashion wear for men, women, and children.",
+            "slug": "clothing"
+        }
+    },
+    {
+        "model": "store.category",
+        "pk": 2,
+        "fields": {
+            "cover": "https://placehold.co/800x600?text=Electronics",
+            "name": "Electronics",
+            "description": "Gadgets, accessories, and electronic devices.",
+            "slug": "electronics"
+        }
+    },
+    {
+        "model": "store.category",
+        "pk": 3,
+        "fields": {
+            "cover": "https://placehold.co/800x600?text=Home+Appliances",
+            "name": "Home Appliances",
+            "description": "Essential appliances for every home.",
+            "slug": "home-appliances"
+        }
+    },
+    {
+        "model": "store.category",
+        "pk": 4,
+        "fields": {
+            "cover": "https://placehold.co/800x600?text=Books",
+            "name": "Books",
+            "description": "Fiction, non-fiction, educational and more.",
+            "slug": "books"
+        }
+    },
+    {
+        "model": "store.category",
+        "pk": 5,
+        "fields": {
+            "cover": "https://placehold.co/800x600?text=Sports",
+            "name": "Sports",
+            "description": "Sports gear, equipment, and fitness accessories.",
+            "slug": "sports"
+        }
+    }
+]

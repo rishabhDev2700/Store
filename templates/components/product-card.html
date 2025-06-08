@@ -1,11 +1,43 @@
-<a class="m-2 rounded-md bg-neutral-900 flex w-full sm:w-64 min-h-[26rem] lg:w-96 hover:scale-[98%] duration-100 shadow-md hover:shadow-black/90 shadow-black/40"
-    href="{{product.get_absolute_url}}">
-    <div class="flex flex-col">
-        <img class="w-full lg:w-96 object-cover" src="{{product.cover.url}}" alt="">
-        <div class="py-4 px-2 flex flex-col justify-between">
-            <h2 class="text-2xl my-1">{{product.name}}</h2>
-            <div class="font-light my-1">{{product.category}}</div>
-            <div class="font-bold my-1 text-2xl">$ {{product.price}}</div>
+<div
+    class="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group border border-gray-200 m-1 md:m-4">
+    <a href="{{ product.get_absolute_url }}" class="block">
+        <div class="relative overflow-hidden">
+            {% if product.cover %}
+            <img src="{% if category.cover.url %}{{ category.cover.url }}{% else %}https://placehold.co/800x600?text={{product.name}}{% endif %}"
+                alt="{{ product.name }}"
+                class="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-300">
+            {% else %}
+            <div class="w-full h-48 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                <span class="text-4xl text-gray-400">📷</span>
+            </div>
+            {% endif %}
+            {% if not product.is_available %}
+            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                <span class="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    Out of Stock
+                </span>
+            </div>
+            {% endif %}
         </div>
+    </a>
+    <div class="p-4">
+        <h3 class="font-semibold text-gray-800 mb-2 truncate">{{ product.name }}</h3>
+        <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ product.description|truncatewords:15 }}</p>
+        <div class="flex items-center justify-between mb-3">
+            <span class="text-md font-bold text-gray-800">Rs. {{ product.price }}</span>
+            <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                {{ product.category.name }}
+            </span>
+        </div>
+
+        {% if product.tags.all %}
+        <div class="flex flex-wrap gap-1 mb-3">
+            {% for tag in product.tags.all|slice:":3" %}
+            <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                #{{ tag.name }}
+            </span>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
-</a>
+</div>

@@ -8,97 +8,194 @@
 <div class="grid md:col-span-3 lg:col-span-4 xl:col-span-9 grid-cols-1 lg:grid-cols-8 lg:gap-8">
 
     <!-- Carousel -->
-    <div class="carousel relative col-span-full lg:col-span-3 overflow-hidden">
-        <div class="carousel-inner h-[50vh]">
-            {% for image in images %}
-            <div class="carousel-item hidden w-full h-full text-center">
-                <img src="{{ image.image.url }}" alt="Slide {{ forloop.counter }}"
-                    class="w-full h-full object-contain rounded-2xl" loading="lazy" />
+    <div class="carousel relative col-span-full lg:col-span-3 bg-gray-50 rounded-2xl overflow-hidden shadow-lg">
+        <div class="carousel-inner aspect-square lg:h-[60vh] grid content-center justify-center">
+            {% for image in default_images %}
+            <div class="carousel-item {% if forloop.first %}block{% else %}hidden{% endif %} w-full h-full">
+                <img src="{{ image.image.url }}" alt="{{ product.name }} - Image {{ forloop.counter }}"
+                    class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                    loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" />
             </div>
             {% endfor %}
         </div>
-        <!-- Carousel controls -->
+        {% if default_images|length > 1 %}
         <button id="prev"
-            class="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-700 text-white opacity-30 hover:opacity-70 h-full w-8 flex items-center justify-center rounded-l-full shadow-md shadow-black/40">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+            class="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm text-gray-800 hover:bg-white hover:scale-110 w-12 h-12 flex items-center justify-center rounded-full shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                 <path
                     d="M8.36853 12L13.1162 3.03212L14.8838 3.9679L10.6315 12L14.8838 20.0321L13.1162 20.9679L8.36853 12Z" />
             </svg>
         </button>
         <button id="next"
-            class="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-700 text-white opacity-30 hover:opacity-70 h-full w-8 flex items-center justify-center rounded-r-full shadow-md shadow-black/40">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+            class="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm text-gray-800 hover:bg-white hover:scale-110 w-12 h-12 flex items-center justify-center rounded-full shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                 <path
                     d="M15.6315 12L10.8838 3.03212L9.11622 3.9679L13.3685 12L9.11622 20.0321L10.8838 20.9679L15.6315 12Z" />
             </svg>
         </button>
-    </div>
-
-    <!-- Product Info -->
-    <div class="col-span-full lg:col-span-5 flex flex-col text-gray-800 p-4">
-        <h1 class="text-4xl my-4">{{ product.name }}</h1>
-        <hr class="text-gray-300 mb-4" />
-        <h2 class="text-2xl font-bold mb-4">Price: ${{ product.price }}</h2>
-
-        <div class="prose prose-lg max-w-none mb-6">
-            {{ product.description|safe }}
-        </div>
-
-        <!-- Add to Cart -->
-        <div class="flex flex-wrap gap-x-1 md:gap-4 items-center justify-end lg:justify-start my-4">
-            <button id="add-button" value="{{ product.id }}"
-                class="px-4 py-3 bg-gradient-to-tr from-green-700 to-green-500 hover:to-green-800 duration-300 shadow-md hover:scale-95 text-white rounded-sm">
-                Add to Cart
-            </button>
-
-            <select name="qnty" id="quantity{{ product.id }}"
-                class="text-black p-4 rounded-sm bg-neutral-200 shadow-md">
-                {% for i in "12345" %}
-                <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
-                {% endfor %}
-            </select>
-
-            <a href="{% url 'orders:summary' %}"
-                class="px-4 py-3 bg-gradient-to-tr from-teal-700 to-teal-500 hover:to-teal-800 duration-300 shadow-md hover:scale-95 text-white rounded-sm">
-                Cart
-            </a>
-        </div>
-    </div>
-
-    <!-- Reviews -->
-    <div class="col-span-full mb-8 bg-neutral-200 rounded-xl p-4 m-4 shadow-md shadow-black/20">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Reviews</h2>
-
-        {% if not reviews %}
-        <p class="text-lg text-gray-600">No Reviews Yet</p>
-        {% else %}
-        <div class="flex flex-wrap gap-4">
-            {% for review in reviews %}
-            <div class="bg-white text-black p-4 shadow-md border-2 border-black w-full md:w-96">
-                <div class="flex justify-between items-center border-b-2 border-black mb-4">
-                    <h3 class="text-2xl font-bold">{{ review.user.username }}</h3>
-                    <div class="flex items-center">
-                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M23.632 9.201a.628.628 0 0 1-.22.678l-5.726 4.96 1.727 7.394a.606.606 0 0 1-.935.676l-6.503-3.953-6.503 3.953a.713.713 0 0 1-.374.112.57.57 0 0 1-.34-.109.629.629 0 0 1-.222-.679l1.729-7.393L.539 9.879A.607.607 0 0 1 .897 8.78l7.536-.635 2.965-7.083a.62.62 0 0 1 1.155.001l2.965 7.082 7.536.635a.63.63 0 0 1 .578.42z" />
-                        </svg>
-                        <span class="ml-2 text-xl font-black">{{ review.rating }}</span>
-                    </div>
-                </div>
-                <p>{{ review.review }}</p>
-            </div>
+        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+            {% for image in default_images %}
+            <button
+                class="indicator w-2 h-2 rounded-full bg-white/50 hover:bg-white transition-all duration-300 {% if forloop.first %}bg-white{% endif %}"
+                data-slide="{{ forloop.counter0 }}"></button>
             {% endfor %}
         </div>
         {% endif %}
     </div>
 
+    <div class="col-span-full lg:col-span-5 flex flex-col space-y-6 p-6 lg:p-8">
+        <div class="space-y-4">
+            <h1 class="text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 leading-tight">
+                {{ product.name }}
+            </h1>
+            <div class="text-lg text-black">{{product.description}}</div>
+            <div class="flex items-center space-x-4">
+                <h2 class="text-2xl lg:text-3xl font-semibold text-green-600">
+                    <span id="variant-price" class="font-bold">Select options</span>
+                </h2>
+                <span class="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                    In Stock
+                </span>
+            </div>
+        </div>
+
+        <div class="prose prose-gray prose-lg max-w-none">
+            {{ product.description|safe }}
+        </div>
+
+        {% if attribute_options %}
+        <div class="space-y-4 text-black">
+            <h3 class="text-lg font-semibold text-gray-900">Product Options</h3>
+            <div id="variant-selectors" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {% for attr_name, values in attribute_options.items %}
+                <div class="space-y-2">
+                    <label for="{{ attr_name }}" class="block text-sm font-medium text-gray-700">
+                        {{ attr_name }}
+                    </label>
+                    <select name="{{ attr_name }}"
+                        class="variant-select w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white transition-colors duration-200"
+                        data-attr="{{ attr_name }}">
+                        <option value="">Choose {{ attr_name }}</option>
+                        {% for val in values %}
+                        <option value="{{ val }}">{{ val }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="space-y-4 pt-4 border-t border-gray-200">
+            <div class="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+                <div class="flex-1 space-y-2">
+                    <label for="quantity{{ product.id }}" class="block text-sm font-medium text-gray-700">
+                    </label>
+                    <select name="qnty" id="quantity{{ product.id }}"
+                        class="w-full sm:w-24 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black bg-white">
+                        {% for i in "12345" %}
+                        <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button id="add-button"
+                    class="flex-1 sm:flex-none px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 disabled:hover:translate-y-0 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                    data-product="{{ product.id }}" data-variant="{{ variant.id }}" disabled>
+                    <span class="flex items-center justify-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13v6a2 2 0 002 2h6a2 2 0 002-2v-6M7 13H5.4M17 17v2a2 2 0 01-2 2H9a2 2 0 01-2-2v-2">
+                            </path>
+                        </svg>
+                        <span>Add to Cart</span>
+                    </span>
+                </button>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <a href="{% url 'orders:summary' %}"
+                    class="flex-1 px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-medium rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 text-center">
+                    <span class="flex items-center justify-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 11V7a4 4 0 00-8 0v4M8 11h8v6H8v-6z"></path>
+                        </svg>
+                        <span>View Cart</span>
+                    </span>
+                </a>
+
+                <button
+                    class="flex-1 px-6 py-3 border-2 border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 font-medium rounded-lg transition-colors duration-300">
+                    <span class="flex items-center justify-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                        <span>Add to Wishlist</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-span-full mb-8 bg-white rounded-2xl shadow-md border border-gray-200 p-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+            <svg class="w-6 h-6 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                    d="M23.632 9.201a.628.628 0 0 1-.22.678l-5.726 4.96 1.727 7.394a.606.606 0 0 1-.935.676l-6.503-3.953-6.503 3.953a.713.713 0 0 1-.374.112.57.57 0 0 1-.34-.109.629.629 0 0 1-.222-.679l1.729-7.393L.539 9.879A.607.607 0 0 1 .897 8.78l7.536-.635 2.965-7.083a.62.62 0 0 1 1.155.001l2.965 7.082 7.536.635a.63.63 0 0 1 .578.42z" />
+            </svg>
+            Reviews ({{ reviews|length }})
+        </h2>
+
+        {% if not reviews %}
+        <div class="text-center py-8">
+            <p class="text-gray-600 text-lg">No reviews yet. Be the first to review!</p>
+        </div>
+        {% else %}
+        <div class="space-y-6">
+            {% for review in reviews %}
+            <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-semibold text-gray-900">{{ review.user.first_name }} {{review.user.last_name}}</h3>
+                    <div class="flex items-center">
+                        {% for i in "12345" %}
+                        <svg class="w-4 h-4 {% if forloop.counter <= review.rating %}text-yellow-400{% else %}text-gray-300{% endif %} fill-current"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M23.632 9.201a.628.628 0 0 1-.22.678l-5.726 4.96 1.727 7.394a.606.606 0 0 1-.935.676l-6.503-3.953-6.503 3.953a.713.713 0 0 1-.374.112.57.57 0 0 1-.34-.109.629.629 0 0 1-.222-.679l1.729-7.393L.539 9.879A.607.607 0 0 1 .897 8.78l7.536-.635 2.965-7.083a.62.62 0 0 1 1.155.001l2.965 7.082 7.536.635a.63.63 0 0 1 .578.42z" />
+                        </svg>
+                        {% endfor %}
+                        <span class="ml-2 text-sm font-semibold">{{ review.rating }}/5</span>
+                    </div>
+                </div>
+                <p class="text-gray-700">{{ review.review }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
 </div>
 
-
 <script>
+    function showMessage(message) {
+        const messageBox = document.getElementById("message-box");
+        const messagesList = document.querySelector(".messages");
+        const newMessage = document.createElement("li");
+        newMessage.className = "message text-lg px-4 py-2 rounded-md";
+        newMessage.textContent = message;
+        messagesList.appendChild(newMessage);
+        messageBox.classList.add('bottom-12');
+        setTimeout(function () {
+            console.log("in the timeout")
+            newMessage.style.display = 'none';
+        }, 2000);
+    }
+    variants = JSON.parse('{{ variants_data_json | safe }}')
+    console.log(variants)
     let currentIndex = 0;
     const items = $('.carousel-item');
-    items.eq(currentIndex).toggleClass('hidden');
     const itemCount = items.length;
 
     function showItem(index) {
@@ -118,30 +215,104 @@
 
     $(document).on('click', '#add-button', function (e) {
         e.preventDefault();
+        if (!$('#add-button').data('variant')) return alert("Please select a valid variant");
+
         $.ajax({
             type: 'POST',
             url: '{% url "orders:bag_add" %}',
             data: {
-                item_id: $('#add-button').val(),
-                quantity: $("#quantity" + {{ product.id }} + " option:selected").text(),
-            csrfmiddlewaretoken: "{{csrf_token}}",
+                item_id: $('#add-button').data('variant'),
+                quantity: $("#quantity{{ product.id }} option:selected").val(),
+                csrfmiddlewaretoken: "{{ csrf_token }}",
                 action: 'post'
-    },
-        success: function (json) {
-            const messageBox = document.getElementById("message-box");
-            const messagesList = document.querySelector(".messages");
-            const newMessage = document.createElement("li");
-            newMessage.className = "message text-lg px-4 py-2 rounded-md";
-            newMessage.textContent = json.message;
-            messagesList.appendChild(newMessage);
-            messageBox.classList.add('bottom-12');
-            setTimeout(function () {
-                console.log("in the timeout")
-                newMessage.style.display = 'none';
-            }, 2000);
-        },
-        error: function (xhr, errmsg, err) { }
-      });
-    })
+            },
+            success: function (json) {
+                showMessage(json.message)
+
+            },
+            error: function (xhr, errmsg, err) { }
+        });
+    });
+    function getFilteredVariants(selectedAttrs) {
+        return variants.filter(variant => {
+            return Object.entries(selectedAttrs).every(([key, val]) =>
+                variant.attributes[key] === val
+            );
+        });
+    }
+
+    function findMatchingVariant(selectedAttrs) {
+        return variants.find(variant =>
+            Object.entries(selectedAttrs).every(([key, val]) =>
+                variant.attributes[key] === val
+            )
+        );
+    }
+
+    function updateVariantDisplay(variant) {
+        if (!variant) {
+            $('#variant-price').text("Unavailable");
+            $('#add-button').prop('disabled', true).text("Unavailable");
+            return;
+        }
+
+        $('#variant-price').text(`Rs. ${variant.price}`);
+        $('#add-button').data('variant', variant.id).prop('disabled', false).text("Add to Cart");
+        console.log($('#add-button').data('variant'))
+        if (variant.images.length > 0) {
+            $('.carousel-item img').attr('src', variant.images[0]);
+        }
+    }
+
+    function updateAvailableOptions(selectedAttrs) {
+        // Reset all options first
+        $('.variant-select').each(function () {
+            const attrName = $(this).data('attr');
+            const currentVal = $(this).val();
+            const select = $(this);
+            const options = new Set();
+
+            // Filter variants that match other selected attributes (excluding this one)
+            const otherAttrs = { ...selectedAttrs };
+            delete otherAttrs[attrName];
+            const filtered = getFilteredVariants(otherAttrs);
+
+            // Collect available options for this attribute
+            filtered.forEach(variant => {
+                options.add(variant.attributes[attrName]);
+            });
+
+            // Save existing selection
+            const wasSelected = options.has(currentVal);
+
+            // Rebuild dropdown
+            const placeholder = `Choose ${attrName}`;
+            select.empty().append(`<option value="">${placeholder}</option>`);
+            Array.from(options).sort().forEach(opt => {
+                select.append(`<option value="${opt}" ${opt === currentVal ? 'selected' : ''}>${opt}</option>`);
+            });
+
+            // Restore or reset if previous value became invalid
+            if (!wasSelected) {
+                select.val("");
+            }
+        });
+    }
+
+    $('.variant-select').on('change', function () {
+        const selectedAttrs = {};
+        $('.variant-select').each(function () {
+            const attrName = $(this).data('attr');
+            const val = $(this).val();
+            if (val) selectedAttrs[attrName] = val;
+        });
+
+        updateAvailableOptions(selectedAttrs);
+
+        const match = findMatchingVariant(selectedAttrs);
+        updateVariantDisplay(match);
+    });
+
 </script>
+
 {% endblock %}

@@ -1,0 +1,74 @@
+[
+    {
+        "model": "store.productattributevalue",
+        "pk": 1,
+        "fields": {
+            "attribute": 1,
+            "value": "S"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 2,
+        "fields": {
+            "attribute": 1,
+            "value": "M"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 3,
+        "fields": {
+            "attribute": 1,
+            "value": "L"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 4,
+        "fields": {
+            "attribute": 2,
+            "value": "Red"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 5,
+        "fields": {
+            "attribute": 2,
+            "value": "Blue"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 6,
+        "fields": {
+            "attribute": 2,
+            "value": "Black"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 7,
+        "fields": {
+            "attribute": 3,
+            "value": "64GB"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 8,
+        "fields": {
+            "attribute": 3,
+            "value": "128GB"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 9,
+        "fields": {
+            "attribute": 3,
+            "value": "256GB"
+        }
+    }
+]

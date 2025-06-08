@@ -1,13 +1,48 @@
 {%extends 'base.html'%}
 {%block title%}Explore The Store{%endblock%}
-
 {% block content %}
 {% include '../components/sidebar.html'%}
-<div class="w-5/6 mx-auto">
-    <h1 class="text-4xl my-8 text-center">Explore</h1>
+<div class="md:col-span-3 lg:col-span-4 xl:col-span-9 2xl:col-span-10 min-h-[80vh]">
+    <h1 class="text-4xl my-8 text-center font-bold text-gray-800">Explore Our Store</h1>
 
-    <div class="flex flex-col items-center justify-start lg:grid lg:grid-cols-4 mx-auto">
+    <!-- Categories Section -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6 text-gray-700">Shop by Category</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for category in categories %}
+            {% include '../components/category-card.html' with category=category %}
 
-    </div>
+            {% empty %}
+            <div class="col-span-full text-center py-8">
+                <p class="text-gray-500 text-lg">No categories available yet</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6 text-gray-700">Featured Products</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for product in featured_products %}
+            {% include '../components/product-card.html' with product=product %}
+
+            {% empty %}
+            <div class="col-span-full text-center py-8">
+                <p class="text-gray-500">No featured products available</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
 </div>
+
+<style>
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
 {% endblock content %}

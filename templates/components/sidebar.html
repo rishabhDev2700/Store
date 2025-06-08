@@ -1,39 +1,52 @@
-<aside class="w-full md:col-span-1 lg:col-span-2 xl:col-span-3 2xl:col-span-2">
-    <form action="{% url 'store:search' %}" id="searchbar" method="get" class="flex items-center justify-center">
+<aside class="w-full md:col-span-1 lg:col-span-2 xl:col-span-3 2xl:col-span-2 lg:ml-4">
+    <!-- Search Bar -->
+    <div class="bg-white text-black rounded-xl shadow-md lg:mb-4">
+        <form action="{% url 'store:search' %}" method="get" class="relative">
+            <input
+                class="w-full py-3 pl-4 pr-12 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                type="text" name="query" placeholder="Search products..." 
+                {% if request.GET.query %}value="{{request.GET.query}}" {% endif %}>
 
-        <input
-            class="w-full py-2 px-4 focus:outline-none rounded-l-full text-black shadow-md font-bold border-2 border-gray-200"
-            type="text" name="query" placeholder="Search">
-        <button class="p-2 bg-white rounded-r-full hover:bg-purple-500 shadow-md border-2 border-gray-200 duration-200"
-            form="searchbar" value="submit" role="search" type="submit">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="rgba(0,0,0,1)">
-                <path
-                    d="M11 2C15.968 2 20 6.032 20 11C20 15.968 15.968 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2ZM11 18C14.8675 18 18 14.8675 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18ZM19.4853 18.0711L22.3137 20.8995L20.8995 22.3137L18.0711 19.4853L19.4853 18.0711Z">
-                </path>
-            </svg>
-        </button>
-    </form>
-    <div class="hidden md:flex md:flex-col xl:min-h-[70vh] w-full lg:px-4">
-        <div class=" text-center">
-            <h2 class="my-4 text-black text-center text-base">Categories</h2>
-            <div class="flex flex-col lg:flex-row justify-center text-neutral-700">
+            <button type="submit"
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </button>
+        </form>
+    </div>
 
-                {% for category in categories%}
-                <a class="bg-neutral-200 hover:bg-neutral-600 hover:text-white rounded-md p-2 m-2 duration-200"
-                    href=" {% url 'store:show-category' category.slug %}">{{category.name}}</a>
+    <!-- Desktop Content -->
+    <div class="hidden md:block space-y-6">
+        <!-- Categories -->
+        {% if categories %}
+        <div class="bg-white rounded-xl shadow-md p-5">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Categories</h2>
+            <div class="space-y-2">
+                {% for category in categories %}
+                <a href="{% url 'store:show-category' category.slug %}"
+                    class="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors duration-200">
+                    {{ category.name }}
+                </a>
                 {% endfor %}
             </div>
-
         </div>
-        <h2 class="my-4 text-black text-center text-base">Tags</h2>
-        <div class="flex flex-wrap justify-center">
-            {%for tag in tags%}
-            <a href="{% url 'store:by-tag' tag.slug %}"
-                class="bg-white text-neutral-950 font-light rounded-md uppercase m-2 py-1 px-2 border-2 border-gray-400 hover:bg-neutral-500 duration-200">
-                {{tag.name}}
-            </a>
-            {% endfor %}
+        {% endif %}
 
+        <!-- Tags -->
+        {% if tags %}
+        <div class="bg-white rounded-xl shadow-md p-5">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Tags</h2>
+            <div class="flex flex-wrap gap-2">
+                {% for tag in tags %}
+                <a href="{% url 'store:by-tag' tag.slug %}"
+                    class="px-3 py-1 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 text-sm rounded-full transition-colors duration-200">
+                    {{ tag.name }}
+                </a>
+                {% endfor %}
+            </div>
         </div>
+        {% endif %}
     </div>
 </aside>

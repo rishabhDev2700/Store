@@ -1,23 +1,42 @@
-{%extends 'base.html'%}
-{%load tailwind_filters %}
-{%load static%}
-{%block css%}
-{%endblock%}
-{%block title%}Sign Up{%endblock%}
-{%block content%}
-<div class="md:grid-cols-subgrid col-span-full mx-auto min-h-[60vh] ">
+{% extends '../base.html' %}
+{% load static %}
+{% load tailwind_filters %}
+
+{% block css %}
+{% endblock %}
+{% block title %}Sign Up{% endblock %}
+{% block content %}
+<div class="md:grid-cols-subgrid col-span-full mx-auto min-h-[60vh]">
     <div class="min-h-[30vh] border border-neutral-200 p-8 rounded-2xl shadow-md mb-8">
-        <h1 class="text-4xl mb-4 text-neutral-600 text-center">Sign In</h1>
+        <h1 class="text-4xl mb-4 text-neutral-600 text-center">Sign Up</h1>
         <div class="w-full pb-4">
-            <form action="{%url 'accounts:sign_up'%}" method="post" class="mx-auto flex flex-col text-black">
-                {%csrf_token%}
-                {{form|crispy}}
-                <input class="px-4 py-2 rounded-md mt-4 bg-blue-600 hover:bg-blue-700 text-white w-32 self-center"
-                    type="submit" value="Sign Up">
+            <form action="{% url 'accounts:sign_up' %}" method="post" class="mx-auto flex flex-col text-black">
+                {% csrf_token %}
 
+                {% if form.non_field_errors %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                {{ form|crispy }}
+
+                <button type="submit"
+                    class="px-4 py-2 rounded-md mt-4 bg-blue-600 hover:bg-blue-700 text-white w-32 self-center transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Sign Up
+                </button>
             </form>
-        </div>
 
+            <div class="text-center mt-4">
+                <p class="text-neutral-600">
+                    Already have an account?
+                    <a href="{% url 'accounts:sign_in' %}"
+                        class="text-blue-600 hover:text-blue-700 underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded">
+                        Sign In
+                    </a>
+                </p>
+            </div>
+        </div>
     </div>
 </div>
-{%endblock%}
+{% endblock %}

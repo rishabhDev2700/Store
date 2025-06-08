@@ -35,12 +35,18 @@ DEBUG = env("DEBUG", bool, False)
 ALLOWED_HOSTS = [
     "store.fuzzydevs.com",
     "store.therishabhdev.com",
+    "localhost",
+    "127.0.0.1",
+    "0.0.0.0",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://store.fuzzydevs.com",
     "http://store.fuzzydevs.com",
     "https://store.therishabhdev.com",
+    "http://localhost",
+    "http://127.0.0.1",
+    "http://0.0.0.0",
 ]
 
 if DEBUG:
@@ -186,8 +192,7 @@ RAZORPAY_ID = env("RAZORPAY_ID")
 RAZORPAY_SECRET_KEY = env("RAZORPAY_SECRET_KEY")
 STORAGES = {
     "default": {
-        # "BACKEND": "core.storages.PublicMediaStorage",
-        "BACKEND": "storages.backends.s3.S3Storage",
+        "BACKEND": "core.storages.PublicMediaStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
@@ -200,10 +205,6 @@ AWS_S3_ADDRESSING_STYLE = "virtual"
 AWS_S3_REGION_NAME = "eu-north-1"
 # MEDIA_URL = "media/"
 # MEDIA_ROOT = "media/"
-if not DEBUG:
-    MEDIA_ROOT = "media"
-    MEDIA_HOST = f"{AWS_S3_BUCKET_NAME}.s3.amazonaws.com"
-    MEDIA_URL = f"https://{MEDIA_HOST}/"
 
 MEDIA_ROOT = "media"
 MEDIA_HOST = f"{AWS_S3_BUCKET_NAME}.s3.amazonaws.com"
@@ -222,14 +223,13 @@ THUMBNAILS = {
         "BACKEND": "thumbnails.backends.metadata.DatabaseBackend",
     },
     "STORAGE": {
-        # "BACKEND": "core.storages.PublicMediaStorage",
-        "BACKEND": "storages.backends.s3.S3Storage",
+        "BACKEND": "core.storages.PublicMediaStorage",
         # You can also use Amazon S3 or any other Django storage backends
     },
     "SIZES": {
         "large": {
             "PROCESSORS": [
-                {"PATH": "thumbnails.processors.resize", "width": 300, "height": 550},
+                {"PATH": "thumbnails.processors.resize", "width": 350, "height": 550},
                 {"PATH": "thumbnails.processors.flip", "direction": "horizontal"},
             ],
         },
@@ -290,9 +290,9 @@ UNFOLD = {
     "STYLES": [
         lambda request: static("css/styles.css"),
     ],
-    "SCRIPTS": [
-        lambda request: static("js/script.js"),
-    ],
+    # "SCRIPTS": [
+    #     lambda request: static("js/script.js"),
+    # ],
     "BORDER_RADIUS": "6px",
     "EXTENSIONS": {
         "modeltranslation": {
@@ -305,5 +305,23 @@ UNFOLD = {
     },
     "SIDEBAR": {
         "SHOW_ITEMS": True,
+    },
+}
+
+FIXTURE_DIRS = [
+    BASE_DIR / "fixtures",
+]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "DEBUG",
     },
 }

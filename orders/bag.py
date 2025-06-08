@@ -1,48 +1,49 @@
 from decimal import Decimal
-
 from core import settings
-from store.models import Product as Item
+from store.models import ProductVariant  # <-- use this instead
 
 
 class Bag:
     def __init__(self, request):
         self.session = request.session
         bag = self.session.get(settings.BAG_SESSION_ID)
-        if settings.BAG_SESSION_ID not in request.session:
+        if not bag:
             bag = self.session[settings.BAG_SESSION_ID] = {}
         self.bag = bag
 
-    def add(self, item, quantity):
-        item_id = str(item.id)
-        if item_id in self.bag:
-            self.bag[item_id]["quantity"] = quantity
-        else:
-            self.bag[item_id] = {"price": str(item.price), "quantity": quantity}
+    def add(self, variant, quantity):
+        print(variant)
+        variant_id = str(variant.id)
+        self.bag[variant_id] = {"price": int(variant.price), "quantity": quantity}
         self.save()
 
-    def update(self, item, quantity):
-        item_id = str(item.id)
-        if item_id in self.bag:
-            self.bag[item_id]["quantity"] = quantity
-        self.save()
+    def update(self, variant, quantity):
+        variant_id = str(variant.id)
+        if variant_id in self.bag:
+            self.bag[variant_id]["quantity"] = quantity
+            self.save()
 
-    def delete(self, item):
-        item_id = str(item.id)
-        if item_id in self.bag:
-            del self.bag[item_id]
+    def delete(self, variant):
+        variant_id = str(variant.id)
+        if variant_id in self.bag:
+            del self.bag[variant_id]
             self.save()
 
     def clear(self):
-        del self.session[settings.BAG_SESSION_ID]
+        if settings.BAG_SESSION_ID in self.session:
+            del self.session[settings.BAG_SESSION_ID]
+            self.save()
 
     def __iter__(self):
-        item_ids = self.bag.keys()
-        items = Item.objects.filter(id__in=item_ids)
+        variant_ids = self.bag.keys()
+        variants = ProductVariant.objects.select_related("product").filter(
+            id__in=variant_ids
+        )
         bag = self.bag.copy()
-        for item in items:
-            bag[str(item.id)]["item"] = item
+        for variant in variants:
+            bag[str(variant.id)]["variant"] = variant
         for item in bag.values():
-            item["price"] = Decimal(item["price"])
+            item["price"] = int(item["price"])
             item["total_price"] = item["price"] * item["quantity"]
             yield item
 

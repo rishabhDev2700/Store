@@ -1,24 +1,28 @@
 import razorpay
 from django.contrib import messages
-from django.http import HttpResponseBadRequest
-from django.shortcuts import render, redirect
+from django.http import Http404, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.csrf import csrf_exempt
-
+from django.contrib.auth.decorators import login_required
 from core import settings
 from orders.bag import Bag
-from store.models import Order, OrderProduct
+from store.models import ORDER_STATUS, Order, OrderProduct
 from payment.models import PaymentOrder
+import logging
 
 client = razorpay.Client(auth=(settings.RAZORPAY_ID, settings.RAZORPAY_SECRET_KEY))
+logger = logging.getLogger(__name__)
 
 
+@login_required
 def create_payment_order(request):
-    amount = int(Bag(request).get_subtotal().__str__())
+    amount = Bag(request).get_subtotal()
     if amount < 10:
         messages.error(request, "Total Amount should be greater than or equal to 10!")
         return redirect("orders:summary")
+    print(f"Amount : {amount*100}")
     razorpay_order = client.order.create(
-        dict(amount=(amount * 100), currency="INR", payment_capture="0")
+        dict(amount=int(amount * 100), currency="INR", payment_capture="0")
     )
     payment_order = PaymentOrder(
         user=request.user,
@@ -68,22 +72,66 @@ def payment_handler(request):
                     payment_order.verified = True
                     payment_order.save()
                     bag = Bag(request)
-                    print(bag)
+                    print(request.session[settings.BAG_SESSION_ID])
                     for item in bag:
                         OrderProduct.objects.create(
                             order=order,
-                            product=item["item"],
-                            price=item["total_price"],
+                            product=item["variant"],
+                            price=item["price"],
                             quantity=item["quantity"],
                         )
                     messages.success(request, "Order placed Successfully")
+                    bag.clear()
                     return redirect("orders:summary")
-                except:
-                    messages.error(request, "Order Failed")
+                except Exception as e:
+                    messages.error(request, f"Order Failed {e}")
             else:
                 messages.error(request, "Order Failed. Not verified!!")
-            return redirect("orders:summary")
+            return redirect("orders:view_orders")
         except:
             return HttpResponseBadRequest()
     else:
         return HttpResponseBadRequest()
+
+
+@login_required
+def cancel_order(request):
+    if request.method == "POST":
+        try:
+            print("Cancelling Order!")
+            order_id = request.POST["order_id"]
+            order = get_object_or_404(
+                Order,
+                pk=order_id,
+                user=request.user,
+                status=ORDER_STATUS.PLACED,
+            )
+            print(f"Order Amount:{order.total}")
+            payment_order = get_object_or_404(
+                PaymentOrder,
+                order=order,
+                payment_order_id=order.razorpay_order_id,
+                user=request.user,
+            )
+            print(f"payment_order: {payment_order}")
+            res = client.payment.refund(
+                payment_order.payment_id,
+                {
+                    "amount": int(order.total * 80),
+                    "notes": {
+                        "order_id": order.id,
+                        "total_amount": order.total,
+                        "email": request.user.email,
+                    },
+                },
+            )
+            print(res)
+            if res["status"] == "processed":
+                order.status = ORDER_STATUS.CANCELLED
+                order.save()
+                messages.success(request, "Your refund request has been processed")
+        except Exception as e:
+            logger.error(e)
+        return redirect("orders:view_orders")
+    else:
+        raise HttpResponseBadRequest("Method not allowed")

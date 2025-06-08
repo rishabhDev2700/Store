@@ -1,0 +1,23 @@
+[
+    {
+        "model": "store.productattribute",
+        "pk": 1,
+        "fields": {
+            "name": "Size"
+        }
+    },
+    {
+        "model": "store.productattribute",
+        "pk": 2,
+        "fields": {
+            "name": "Color"
+        }
+    },
+    {
+        "model": "store.productattribute",
+        "pk": 3,
+        "fields": {
+            "name": "Storage"
+        }
+    }
+]

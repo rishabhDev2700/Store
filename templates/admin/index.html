@@ -18,49 +18,51 @@
 
 {% block content %}
 <div
-    class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-xl shadow-lg p-4 space-y-8 transition-colors duration-200">
+    class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-xl shadow-md p-4 space-y-8 transition-colors duration-200">
 
     <!-- Summary Cards -->
     <div class="grid lg:grid-cols-4 gap-6 my-4">
         <div
-            class="lg:col-span-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg dark:shadow-gray-900/50 rounded-xl p-6 text-center hover:shadow-xl dark:hover:shadow-gray-900/70 transition-all duration-300">
+            class="lg:col-span-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md dark:shadow-gray-900/50 rounded-xl p-6 text-center hover:shadow-xl dark:hover:shadow-gray-900/5 transition-all duration-300">
             <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">Total Revenue</h3>
-            <p class="text-3xl text-green-700 dark:text-green-400 font-semibold mt-2">₹{{ total_revenue }}</p>
+            <p class="text-3xl text-green-700 dark:text-green-400 font-semibold mt-2">₹{{ total_revenue|floatformat:2 }}
+            </p>
         </div>
         <div
-            class="lg:col-span-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg dark:shadow-gray-900/50 rounded-xl p-6 text-center hover:shadow-xl dark:hover:shadow-gray-900/70 transition-all duration-300">
+            class="lg:col-span-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md dark:shadow-gray-900/50 rounded-xl p-6 text-center hover:shadow-xl dark:hover:shadow-gray-900/5 transition-all duration-300">
             <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">Today's Revenue</h3>
-            <p class="text-3xl text-cyan-700 dark:text-cyan-400 font-semibold mt-2">₹{{ todays_revenue }}</p>
+            <p class="text-3xl text-cyan-700 dark:text-cyan-400 font-semibold mt-2">₹{{ todays_revenue|floatformat:2 }}
+            </p>
         </div>
     </div>
 
     <!-- Charts -->
-    <div class="grid lg:grid-cols-4 grid-rows-[500px] gap-6">
+    <div class="grid lg:grid-cols-4 gap-8">
         <!-- Orders Per Day -->
         <div
-            class="lg:col-span-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg dark:shadow-gray-900/50 p-6 hover:shadow-xl dark:hover:shadow-gray-900/70 transition-all duration-300">
+            class="lg:col-span-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-md dark:shadow-gray-900/50 p-6 hover:shadow-xl dark:hover:shadow-gray-900/5 transition-all duration-300">
             <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Orders in the Last 7 Days</h3>
             <canvas id="ordersChart" class="w-full h-full"></canvas>
         </div>
 
         <!-- Top Products -->
         <div
-            class="lg:col-span-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg dark:shadow-gray-900/50 p-6 hover:shadow-xl dark:hover:shadow-gray-900/70 transition-all duration-300">
+            class="lg:col-span-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-md dark:shadow-gray-900/50 p-6 hover:shadow-xl dark:hover:shadow-gray-900/5 transition-all duration-300">
             <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Top-Selling Products</h3>
             <canvas id="topProductsChart" class="w-full h-full"></canvas>
         </div>
 
         <!-- Category Distribution -->
         <div
-            class="lg:col-span-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg dark:shadow-gray-900/50 p-6 hover:shadow-xl dark:hover:shadow-gray-900/70 transition-all duration-300">
+            class="lg:col-span-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-md dark:shadow-gray-900/50 p-6 hover:shadow-xl dark:hover:shadow-gray-900/5 transition-all duration-300">
             <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Products by Category</h3>
-            <canvas id="categoryChart" class="w-full h-full"></canvas>
+            <canvas id="categoryChart" class="w-full lg:max-h-64"></canvas>
         </div>
     </div>
 
     <!-- Recent Orders -->
     <div
-        class="mt-8 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg dark:shadow-gray-900/50 p-6 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-900/70 transition-all duration-300">
+        class="mt-8 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-md dark:shadow-gray-900/50 p-6 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-900/5 transition-all duration-300">
         <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Recent Orders</h3>
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
@@ -76,15 +78,17 @@
                     {% for order in recent_orders %}
                     <tr
                         class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200">
-                        <td class="p-3">{{ order.user.email }} {{ order.user.last_name }}</td>
-                        <td class="p-3 font-medium text-green-600 dark:text-green-400">₹{{ order.total }}</td>
+                        <td class="p-3">{{ order.user.first_name }} {{ order.user.last_name }} ({{ order.user.email }})
+                        </td>
+                        <td class="p-3 font-medium text-green-600 dark:text-green-400">₹{{ order.total|floatformat:2 }}
+                        </td>
                         <td class="p-3">
                             <span class="px-2 py-1 text-xs font-medium rounded-full 
-                                {% if order.status == 'completed' %}bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300
-                                {% elif order.status == 'pending' %}bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300
-                                {% elif order.status == 'cancelled' %}bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300
+                                {% if order.status == 'COMPLETED' %}bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300
+                                {% elif order.status == 'PLACED' %}bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300
+                                {% elif order.status == 'CANCELLED' %}bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300
                                 {% else %}bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300{% endif %}">
-                                {{ order.status|title }}
+                                {{ order.get_status_display }}
                             </span>
                         </td>
                         <td class="p-3 text-gray-500 dark:text-gray-400">{{ order.created_on|date:"Y-m-d H:i" }}</td>
@@ -139,7 +143,7 @@
         },
         options: {
         responsive: true,
-        maintainAspectRatio: false,
+        maintainAspectRatio: true,
         plugins: {
             legend: {
                 labels: {
@@ -176,7 +180,7 @@
         },
         options: {
         responsive: true,
-        maintainAspectRatio: false,
+        maintainAspectRatio: true,
         plugins: {
             legend: {
                 labels: {
@@ -215,7 +219,7 @@
         },
         options: {
         responsive: true,
-        maintainAspectRatio: false,
+        maintainAspectRatio: true,
         plugins: {
             legend: {
                 labels: {

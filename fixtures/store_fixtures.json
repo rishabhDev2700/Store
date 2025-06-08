@@ -1,0 +1,602 @@
+[
+    {
+        "model": "store.productattribute",
+        "pk": 1,
+        "fields": {
+            "name": "Size"
+        }
+    },
+    {
+        "model": "store.productattribute",
+        "pk": 2,
+        "fields": {
+            "name": "Color"
+        }
+    },
+    {
+        "model": "store.productattribute",
+        "pk": 3,
+        "fields": {
+            "name": "RAM"
+        }
+    },
+    {
+        "model": "store.productattribute",
+        "pk": 4,
+        "fields": {
+            "name": "Storage"
+        }
+    },
+    {
+        "model": "store.productattribute",
+        "pk": 5,
+        "fields": {
+            "name": "Material"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 1,
+        "fields": {
+            "attribute": 1,
+            "value": "Small"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 2,
+        "fields": {
+            "attribute": 1,
+            "value": "Medium"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 3,
+        "fields": {
+            "attribute": 1,
+            "value": "Large"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 4,
+        "fields": {
+            "attribute": 1,
+            "value": "XL"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 5,
+        "fields": {
+            "attribute": 2,
+            "value": "Red"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 6,
+        "fields": {
+            "attribute": 2,
+            "value": "Blue"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 7,
+        "fields": {
+            "attribute": 2,
+            "value": "Black"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 8,
+        "fields": {
+            "attribute": 2,
+            "value": "White"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 9,
+        "fields": {
+            "attribute": 3,
+            "value": "4GB"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 10,
+        "fields": {
+            "attribute": 3,
+            "value": "8GB"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 11,
+        "fields": {
+            "attribute": 3,
+            "value": "16GB"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 12,
+        "fields": {
+            "attribute": 4,
+            "value": "64GB"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 13,
+        "fields": {
+            "attribute": 4,
+            "value": "128GB"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 14,
+        "fields": {
+            "attribute": 4,
+            "value": "256GB"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 15,
+        "fields": {
+            "attribute": 5,
+            "value": "Cotton"
+        }
+    },
+    {
+        "model": "store.productattributevalue",
+        "pk": 16,
+        "fields": {
+            "attribute": 5,
+            "value": "Leather"
+        }
+    },
+    {
+        "model": "store.category",
+        "pk": 1,
+        "fields": {
+            "name": "Electronics",
+            "description": "Latest electronic gadgets, smartphones, laptops, and accessories",
+            "slug": "electronics",
+            "cover": "https://placehold.co/800x600?text=category"
+        }
+    },
+    {
+        "model": "store.category",
+        "pk": 2,
+        "fields": {
+            "name": "Clothing",
+            "description": "Fashion clothing for men, women, and children",
+            "slug": "clothing",
+            "cover": "https://placehold.co/800x600?text=category"
+        }
+    },
+    {
+        "model": "store.category",
+        "pk": 3,
+        "fields": {
+            "name": "Home & Living",
+            "description": "Home decor, furniture, and living essentials",
+            "slug": "home-living",
+            "cover": "https://placehold.co/800x600?text=category"
+        }
+    },
+    {
+        "model": "store.category",
+        "pk": 4,
+        "fields": {
+            "name": "Sports & Fitness",
+            "description": "Sports equipment, fitness gear, and outdoor accessories",
+            "slug": "sports-fitness",
+            "cover": "https://placehold.co/800x600?text=category"
+        }
+    },
+    {
+        "model": "store.category",
+        "pk": 5,
+        "fields": {
+            "name": "Books",
+            "description": "Fiction, non-fiction, educational, and reference books",
+            "slug": "books",
+            "cover": "https://placehold.co/800x600?text=category"
+        }
+    },
+    {
+        "model": "store.product",
+        "pk": 1,
+        "fields": {
+            "name": "iPhone 15 Pro",
+            "description": "Latest iPhone with advanced camera system and A17 Pro chip. Features titanium design and action button.",
+            "slug": "iphone-15-pro",
+            "category": 1,
+            "price": "999.00",
+            "date_added": "2024-03-15",
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=product"
+        }
+    },
+    {
+        "model": "store.product",
+        "pk": 2,
+        "fields": {
+            "name": "MacBook Air M3",
+            "description": "Ultra-thin laptop with M3 chip, 13-inch display, and all-day battery life. Perfect for work and creativity.",
+            "slug": "macbook-air-m3",
+            "category": 1,
+            "price": "1299.00",
+            "date_added": "2024-03-10",
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=product"
+        }
+    },
+    {
+        "model": "store.product",
+        "pk": 3,
+        "fields": {
+            "name": "Premium Cotton T-Shirt",
+            "description": "Comfortable 100% cotton t-shirt with premium quality fabric. Available in multiple colors and sizes.",
+            "slug": "premium-cotton-tshirt",
+            "category": 2,
+            "price": "29.99",
+            "date_added": "2024-03-12",
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=product"
+        }
+    },
+    {
+        "model": "store.product",
+        "pk": 4,
+        "fields": {
+            "name": "Leather Wallet",
+            "description": "Genuine leather wallet with multiple card slots and cash compartment. Handcrafted with attention to detail.",
+            "slug": "leather-wallet",
+            "category": 2,
+            "price": "79.99",
+            "date_added": "2024-03-08",
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=product"
+        }
+    },
+    {
+        "model": "store.product",
+        "pk": 5,
+        "fields": {
+            "name": "Smart Home Speaker",
+            "description": "Voice-controlled smart speaker with high-quality audio and smart home integration capabilities.",
+            "slug": "smart-home-speaker",
+            "category": 3,
+            "price": "149.99",
+            "date_added": "2024-03-05",
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=product"
+        }
+    },
+    {
+        "model": "store.product",
+        "pk": 6,
+        "fields": {
+            "name": "Yoga Mat Pro",
+            "description": "Non-slip yoga mat with extra cushioning and eco-friendly materials. Perfect for yoga and fitness routines.",
+            "slug": "yoga-mat-pro",
+            "category": 4,
+            "price": "49.99",
+            "date_added": "2024-03-01",
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=product"
+        }
+    },
+    {
+        "model": "store.product",
+        "pk": 7,
+        "fields": {
+            "name": "Python Programming Guide",
+            "description": "Comprehensive guide to Python programming for beginners and intermediate developers. Includes practical examples.",
+            "slug": "python-programming-guide",
+            "category": 5,
+            "price": "39.99",
+            "date_added": "2024-02-28",
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=product"
+        }
+    },
+    {
+        "model": "store.productvariant",
+        "pk": 1,
+        "fields": {
+            "product": 1,
+            "sku": "IPH15PRO-128-TB",
+            "price": "999.00",
+            "stock": 25,
+            "is_available": true
+        }
+    },
+    {
+        "model": "store.productvariant",
+        "pk": 2,
+        "fields": {
+            "product": 1,
+            "sku": "IPH15PRO-256-TB",
+            "price": "1099.00",
+            "stock": 18,
+            "is_available": true
+        }
+    },
+    {
+        "model": "store.productvariant",
+        "pk": 3,
+        "fields": {
+            "product": 2,
+            "sku": "MBA-M3-8GB-256",
+            "price": "1299.00",
+            "stock": 15,
+            "is_available": true
+        }
+    },
+    {
+        "model": "store.productvariant",
+        "pk": 4,
+        "fields": {
+            "product": 2,
+            "sku": "MBA-M3-16GB-512",
+            "price": "1599.00",
+            "stock": 12,
+            "is_available": true
+        }
+    },
+    {
+        "model": "store.productvariant",
+        "pk": 5,
+        "fields": {
+            "product": 3,
+            "sku": "TSHIRT-RED-M",
+            "price": "29.99",
+            "stock": 50,
+            "is_available": true
+        }
+    },
+    {
+        "model": "store.productvariant",
+        "pk": 6,
+        "fields": {
+            "product": 3,
+            "sku": "TSHIRT-BLUE-L",
+            "price": "29.99",
+            "stock": 40,
+            "is_available": true
+        }
+    },
+    {
+        "model": "store.productvariant",
+        "pk": 7,
+        "fields": {
+            "product": 4,
+            "sku": "WALLET-LEATHER-BLK",
+            "price": "79.99",
+            "stock": 30,
+            "is_available": true
+        }
+    },
+    {
+        "model": "store.productvariant",
+        "pk": 8,
+        "fields": {
+            "product": 5,
+            "sku": "SPEAKER-WHITE",
+            "price": "149.99",
+            "stock": 20,
+            "is_available": true
+        }
+    },
+    {
+        "model": "store.productvariant",
+        "pk": 9,
+        "fields": {
+            "product": 6,
+            "sku": "YOGA-MAT-BLUE",
+            "price": "49.99",
+            "stock": 35,
+            "is_available": true
+        }
+    },
+    {
+        "model": "store.productvariant",
+        "pk": 10,
+        "fields": {
+            "product": 7,
+            "sku": "BOOK-PYTHON-2024",
+            "price": "39.99",
+            "stock": 100,
+            "is_available": true
+        }
+    },
+    {
+        "model": "store.discount",
+        "pk": 1,
+        "fields": {
+            "product": 1,
+            "percentage": 10.0,
+            "name": "IPHONE10",
+            "valid_till": "2024-12-31"
+        }
+    },
+    {
+        "model": "store.discount",
+        "pk": 2,
+        "fields": {
+            "product": 3,
+            "percentage": 15.0,
+            "name": "TSHIRT15",
+            "valid_till": "2024-12-31"
+        }
+    },
+    {
+        "model": "store.discount",
+        "pk": 3,
+        "fields": {
+            "product": 6,
+            "percentage": 20.0,
+            "name": "FITNESS20",
+            "valid_till": "2024-12-31"
+        }
+    },
+    {
+        "model": "store.order",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "status": "COMPLETED",
+            "contact_no": "+911234567890",
+            "address": "123 Main Street, New Delhi, Delhi 110001, India",
+            "total": 1299,
+            "created_on": "2024-03-20T10:30:00Z",
+            "razorpay_order_id": "order_ORD123456789012"
+        }
+    },
+    {
+        "model": "store.order",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "status": "PLACED",
+            "contact_no": "+919876543210",
+            "address": "456 Park Avenue, Mumbai, Maharashtra 400001, India",
+            "total": 899,
+            "created_on": "2024-03-21T14:15:00Z",
+            "razorpay_order_id": "order_ORD123456789013"
+        }
+    },
+    {
+        "model": "store.order",
+        "pk": 3,
+        "fields": {
+            "user": 3,
+            "status": "PLACED",
+            "contact_no": "+917890123456",
+            "address": "789 Garden Road, Bangalore, Karnataka 560001, India",
+            "total": 599,
+            "created_on": "2024-03-22T09:45:00Z",
+            "razorpay_order_id": "order_ORD123456789014"
+        }
+    },
+    {
+        "model": "store.orderproduct",
+        "pk": 1,
+        "fields": {
+            "order": 1,
+            "product": 3,
+            "quantity": 1,
+            "price": "1299.00"
+        }
+    },
+    {
+        "model": "store.orderproduct",
+        "pk": 2,
+        "fields": {
+            "order": 2,
+            "product": 1,
+            "quantity": 1,
+            "price": "999.00"
+        }
+    },
+    {
+        "model": "store.orderproduct",
+        "pk": 3,
+        "fields": {
+            "order": 2,
+            "product": 5,
+            "quantity": 3,
+            "price": "29.99"
+        }
+    },
+    {
+        "model": "store.orderproduct",
+        "pk": 4,
+        "fields": {
+            "order": 3,
+            "product": 7,
+            "quantity": 1,
+            "price": "79.99"
+        }
+    },
+    {
+        "model": "store.orderproduct",
+        "pk": 5,
+        "fields": {
+            "order": 3,
+            "product": 8,
+            "quantity": 1,
+            "price": "149.99"
+        }
+    },
+    {
+        "model": "store.rating",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "product": 1,
+            "rating": 5,
+            "review": "Amazing phone with excellent camera quality and smooth performance. Highly recommended!"
+        }
+    },
+    {
+        "model": "store.rating",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "product": 2,
+            "rating": 4,
+            "review": "Great laptop for everyday use. Battery life is impressive and the M3 chip is very fast."
+        }
+    },
+    {
+        "model": "store.rating",
+        "pk": 3,
+        "fields": {
+            "user": 3,
+            "product": 3,
+            "rating": 5,
+            "review": "Perfect t-shirt! The cotton quality is excellent and fits perfectly. Will buy more colors."
+        }
+    },
+    {
+        "model": "store.rating",
+        "pk": 4,
+        "fields": {
+            "user": 1,
+            "product": 4,
+            "rating": 4,
+            "review": "Beautiful leather wallet with great craftsmanship. Good value for money."
+        }
+    },
+    {
+        "model": "store.rating",
+        "pk": 5,
+        "fields": {
+            "user": 2,
+            "product": 5,
+            "rating": 4,
+            "review": "Smart speaker works well with voice commands. Sound quality is good for the price."
+        }
+    },
+    {
+        "model": "store.rating",
+        "pk": 6,
+        "fields": {
+            "user": 3,
+            "product": 6,
+            "rating": 5,
+            "review": "Excellent yoga mat! Non-slip surface and perfect thickness. Great for home workouts."
+        }
+    }
+]

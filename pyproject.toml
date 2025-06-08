@@ -20,4 +20,5 @@ dependencies = [
     "django-storages[s3]>=1.14.6",
     "boto3>=1.38.31",
     "boto3-stubs>=1.38.31",
+    "google-api-python-client>=2.171.0",
 ]

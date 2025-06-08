@@ -1,0 +1,126 @@
+[
+    {
+        "model": "store.product",
+        "pk": 1,
+        "fields": {
+            "name": "Basic T-Shirt",
+            "description": "Comfortable cotton t-shirt for everyday wear.",
+            "slug": "basic-t-shirt",
+            "category": 1,
+            "price": "19.99",
+            "date_added": "2024-03-15",
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=Basic+T-Shirt"
+        }
+    },
+    {
+        "model": "store.product",
+        "pk": 2,
+        "fields": {
+            "name": "Smartphone X",
+            "description": "Latest smartphone with high-speed performance.",
+            "slug": "smartphone-x",
+            "category": 2,
+            "price": "699.99",
+            "date_added": "2024-03-12",
+            "is_available": true,
+            "cover": "https://placehold.co/800x600?text=Smartphone+X"
+        }
+    },
+    {
+        "model": "store.productvariant",
+        "pk": 1,
+        "fields": {
+            "product": 1,
+            "attributes": [
+                1,
+                4
+            ],
+            "sku": "TSHIRT-RED-S",
+            "price": "19.99",
+            "stock": 50,
+            "is_available": true
+        }
+    },
+    {
+        "model": "store.productvariant",
+        "pk": 2,
+        "fields": {
+            "product": 1,
+            "attributes": [
+                2,
+                5
+            ],
+            "sku": "TSHIRT-BLUE-M",
+            "price": "19.99",
+            "stock": 35,
+            "is_available": true
+        }
+    },
+    {
+        "model": "store.productvariant",
+        "pk": 3,
+        "fields": {
+            "product": 2,
+            "attributes": [
+                7,
+                6
+            ],
+            "sku": "SMART-64GB-BLK",
+            "price": "699.99",
+            "stock": 20,
+            "is_available": true
+        }
+    },
+    {
+        "model": "store.productvariant",
+        "pk": 4,
+        "fields": {
+            "product": 2,
+            "attributes": [
+                8,
+                4
+            ],
+            "sku": "SMART-128GB-RED",
+            "price": "749.99",
+            "stock": 15,
+            "is_available": true
+        }
+    },
+    {
+        "model": "store.productvariantimage",
+        "pk": 1,
+        "fields": {
+            "variant": 1,
+            "image": "https://placehold.co/800x600?text=Variant",
+            "alt_text": "Red Small T-Shirt"
+        }
+    },
+    {
+        "model": "store.productvariantimage",
+        "pk": 2,
+        "fields": {
+            "variant": 2,
+            "image": "https://placehold.co/800x600?text=Variant",
+            "alt_text": "Blue Medium T-Shirt"
+        }
+    },
+    {
+        "model": "store.productvariantimage",
+        "pk": 3,
+        "fields": {
+            "variant": 3,
+            "image": "https://placehold.co/800x600?text=Variant",
+            "alt_text": "Black Smartphone 64GB"
+        }
+    },
+    {
+        "model": "store.productvariantimage",
+        "pk": 4,
+        "fields": {
+            "variant": 4,
+            "image": "https://placehold.co/800x600?text=Variant",
+            "alt_text": "Red Smartphone 128GB"
+        }
+    }
+]

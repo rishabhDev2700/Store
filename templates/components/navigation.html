@@ -1,66 +1,151 @@
-<div
-    class="lg:flex lg:justify-around h-16 fixed top-0 left-0 w-full z-50 bg-white dark:bg-black shadow-md shadow-neutral-500/10">
-    <div class="flex justify-between items-center px-4 py-2 lg:1/4">
-        <a class="text-black duration-200" href="{%url 'store:categories'%}">
-            <header class="text-3xl font-thin flex gap-x-2 items-center">
-                <svg width="44px" height="44px" viewBox="0 0 1024 1024" class="icon" version="1.1"
-                    xmlns="http://www.w3.org/2000/svg" fill="#000000">
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
+<header class="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+
+            <!-- Logo/Brand -->
+            <a href="{% url 'store:categories' %}"
+                class="flex items-center space-x-2 text-gray-900 hover:text-blue-600 transition-colors duration-200">
+                <svg width="40" height="40" viewBox="0 0 1024 1024" class="flex-shrink-0">
+                    <g>
                         <path
                             d="M545.7 254.4H160.2l3-22.6c6-45.7 28.4-87.7 63.1-118.3 35-30.9 80-47.9 126.7-47.9s91.7 17 126.7 47.9c34.7 30.6 57.1 72.6 63.1 118.3l2.9 22.6z m-338.1-40h290.7C479.8 151 420.9 105.5 353 105.5S226.2 151 207.6 214.4z"
-                            fill="#515151"></path>
-                        <path d="M641 960.2H136.7c-39.6 0-71.8-32.1-71.8-71.8v-674H641v745.8z" fill="#4D96FF"></path>
+                            fill="#6B7280" />
+                        <path d="M641 960.2H136.7c-39.6 0-71.8-32.1-71.8-71.8v-674H641v745.8z" fill="#3B82F6" />
                         <path
                             d="M834.3 488.3H448.8l3-22.6c6-45.7 28.4-87.7 63.1-118.3 35-30.9 80-47.9 126.7-47.9s91.7 17 126.7 47.9C803 378 825.4 420 831.4 465.7l2.9 22.6z m-338.1-40h290.7c-18.6-63.4-77.5-108.8-145.3-108.8-67.9 0-126.8 45.4-145.4 108.8z"
-                            fill="#515151"></path>
+                            fill="#6B7280" />
                         <path
                             d="M890.8 959.6H392.4c-39.4 0-71.4-32-71.4-71.4v-440h641.3v439.9c-0.1 39.5-32 71.5-71.5 71.5z"
-                            fill="#03cb28"></path>
+                            fill="#10B981" />
                     </g>
-                </svg>Store
-            </header>
-        </a>
-        <div id="menu-button" class="lg:hidden">
-            <div class="w-10" id="menu">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black">
-                    <path d="M16 18V20H5V18H16ZM21 11V13H3V11H21ZM19 4V6H8V4H19Z"></path>
                 </svg>
+                <span class="text-2xl font-light">Store</span>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden lg:flex items-center space-x-1">
+                <a href="{% url 'store:home' %}"
+                    class="px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200 font-medium">
+                    Home
+                </a>
+                <a href="{% url 'store:explore' %}"
+                    class="px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200 font-medium">
+                    Explore
+                </a>
+                <a href="{% url 'store:categories' %}"
+                    class="px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200 font-medium">
+                    Categories
+                </a>
+            </nav>
+
+            <!-- Desktop Auth Buttons -->
+            <div class="hidden lg:flex items-center space-x-3">
+                {% if not user.is_authenticated %}
+                <a href="{% url 'accounts:sign_in' %}"
+                    class="px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200 font-medium">
+                    Sign In
+                </a>
+                <a href="{% url 'accounts:sign_up' %}"
+                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 font-medium shadow-sm">
+                    Sign Up
+                </a>
+                {% else %}
+                <a href="{% url 'orders:view_orders' %}"
+                    class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-all duration-200 font-medium shadow-sm">
+                    My Orders
+                </a>
+                <a href="{% url 'orders:summary' %}"
+                    class="relative px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 font-medium shadow-sm">
+                    <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12a2 2 0 01-2 2H8a2 2 0 01-2-2L5 9z" />
+                    </svg>
+                    Bag
+                </a>
+                <a href="{% url 'accounts:logout' %}"
+                    class="px-4 py-2 text-white hover:text-white bg-red-500 hover:bg-red-700 rounded-lg transition-all duration-200 font-medium">
+                    Logout
+                </a>
+                {% endif %}
             </div>
-            <div class="w-10 hidden" id="close">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black">
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button"
+                class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="black" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <svg id="close-icon" class="w-6 h-6 hidden z-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                    fill="black">
                     <path
                         d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z">
                     </path>
                 </svg>
-            </div>
+            </button>
         </div>
     </div>
-    <nav
-        class="fixed bg-white top-16 left-0 text-md lg:text-lg flex flex-col items-stretch w-screen h-[90vh] -translate-y-full translate-x-full duration-200 lg:static lg:flex-row lg:justify-evenly lg:items-center lg:bg-transparent lg:backdrop-blur lg:translate-x-0 lg:translate-y-0 lg:h-auto lg:w-2/4 lg:text-center text-black">
-        <a class="py-4 px-4 lg:py-2 my-2 lg:my-0 mx-4 lg:mr-0 lg:ml-2 min-w-24 rounded-md hover:bg-gray-300  duration-200"
-            href="{% url 'store:home'%}">Home</a>
-        <a class="py-4 px-4 lg:py-2 my-2 lg:my-0 mx-4 lg:mr-0 lg:ml-2 min-w-24 rounded-md hover:bg-gray-300  duration-200"
-            href="{% url 'store:explore'%}">Explore</a>
-        <a class="py-4 px-4 lg:py-2 my-2 lg:my-0 mx-4 lg:mr-0 lg:ml-2 min-w-24 rounded-md hover:bg-gray-300  duration-200"
-            href="{% url 'store:categories'%}">Categories</a>
-        {% if not user.is_authenticated %}
-        <a class="py-4 px-4 lg:py-2 my-2 lg:my-0 mx-4 lg:mr-0 lg:ml-2 min-w-24 rounded-md hover:bg-gray-300  duration-200"
-            href="{% url 'accounts:sign_in'%}">Sign
-            In</a>
-        <a class="py-4 px-4 lg:py-2 my-2 lg:my-0 mx-4 lg:mr-0 lg:ml-2 min-w-24 rounded-md hover:bg-gray-300  duration-200"
-            href="{% url 'accounts:sign_up'%}">Sign
-            Up</a>
 
-        {% else %}
-        <a class="py-4 px-4 lg:py-2 my-2 lg:my-0 mx-4 lg:mr-0 lg:ml-2 min-w-24 rounded-md bg-cyan-500 hover:bg-cyan-600  text-white shadow-sm shadow-gray-800/30 duration-200"
-            href="{% url 'orders:view_orders'%}">My Orders</a>
-        <a class="py-4 px-4 lg:py-2 my-2 lg:my-0 mx-4 lg:mr-0 lg:ml-2 min-w-24 rounded-md bg-blue-500 hover:bg-blue-600  text-white shadow-sm shadow-gray-800/30 duration-200"
-            href="{% url 'orders:summary'%}">Bag</a>
-        <a class="py-4 px-4 lg:py-2 my-2 lg:my-0 mx-4 lg:mr-0 lg:ml-2 min-w-24 rounded-md bg-red-500 hover:bg-red-600  text-white shadow-sm shadow-gray-800/30"
-            href="{% url 'accounts:logout'%}">Logout</a>
-        {% endif %}
+    <!-- Mobile Navigation Menu -->
+    <nav id="mobile-menu" class="lg:hidden hidden bg-white border-t border-gray-200 shadow-lg">
+        <div class="px-4 py-2 space-y-1">
+            <a href="{% url 'store:home' %}"
+                class="block px-4 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-200 font-medium">
+                Home
+            </a>
+            <a href="{% url 'store:explore' %}"
+                class="block px-4 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-200 font-medium">
+                Explore
+            </a>
+            <a href="{% url 'store:categories' %}"
+                class="block px-4 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-200 font-medium">
+                Categories
+            </a>
 
+            <div class="border-t border-gray-200 pt-4 mt-4">
+                {% if not user.is_authenticated %}
+                <a href="{% url 'accounts:sign_in' %}"
+                    class="block px-4 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-200 font-medium">
+                    Sign In
+                </a>
+                <a href="{% url 'accounts:sign_up' %}"
+                    class="block px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 font-medium shadow-sm mt-2">
+                    Sign Up
+                </a>
+                {% else %}
+                <a href="{% url 'orders:view_orders' %}"
+                    class="block px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-all duration-200 font-medium shadow-sm mb-2">
+                    My Orders
+                </a>
+                <a href="{% url 'orders:summary' %}"
+                    class="block px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 font-medium shadow-sm mb-2">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12a2 2 0 01-2 2H8a2 2 0 01-2-2L5 9z" />
+                    </svg>
+                    Bag
+                </a>
+                <a href="{% url 'accounts:logout' %}"
+                    class="block px-4 py-3 text-white hover:text-white bg-red-500 hover:bg-red-700 rounded-lg transition-all duration-200 font-medium">
+                    Logout
+                </a>
+                {% endif %}
+            </div>
+        </div>
     </nav>
-</div>
+</header>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        const closeIcon = document.getElementById('close-icon');
+
+        mobileMenuButton.addEventListener('click', function () {
+            mobileMenu.classList.toggle('hidden');
+            menuIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+
+        });
+    });
+</script>

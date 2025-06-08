@@ -1,19 +1,18 @@
-<a href="{{ category.get_absolute_url }}"
-    class="group block w-full bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-200 overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-1 hover:border-gray-300">
-
-    <!-- Image Container with proper aspect ratio -->
-    <div class="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden">
-        <img src="{{ category.cover.thumbnails.large.url }}" alt="{{ category.name }}"
-            class="absolute inset-0 w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 ease-in-out"
-            loading="lazy" />
-
-    </div>
-
-    <!-- Content Section -->
-    <div class="p-4 sm:p-6 ">
-        <h2
-            class="text-base sm:text-lg font-semibold text-gray-900 text-center line-clamp-2 group-hover:text-blue-600 transition-colors duration-200 leading-tight">
-            {{ category.name }}
-        </h2>
-    </div>
-</a>
+<div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden">
+    <a href="{{ category.get_absolute_url }}">
+        {% if category.cover %}
+        <img src="{% if category.cover.url %}{{ category.cover.url }}{% else %}https://placehold.co/800x600?text=Category{% endif %}" alt="{{ category.name }}" class="w-full h-72 object-cover">
+        {% else %}
+        <div class="w-full h-72 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+            <span class="text-2xl text-white">📦</span>
+        </div>
+        {% endif %}
+        <div class="p-4">
+            <h3 class="font-semibold text-gray-800 mb-2">{{ category.name }}</h3>
+            <p class="text-sm text-gray-600 line-clamp-2">{{ category.description|truncatewords:10 }}</p>
+            <div class="mt-2 text-xs text-blue-600 font-medium">
+                {{ category.product_set.count }} product{{ category.product_set.count|pluralize }}
+            </div>
+        </div>
+    </a>
+</div>

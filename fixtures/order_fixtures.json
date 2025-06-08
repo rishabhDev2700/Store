@@ -1,0 +1,81 @@
+[
+    {
+        "model": "store.order",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "status": "PLACED",
+            "contact_no": "+1234567890",
+            "address": "123 Main Street, Springfield",
+            "total": 59,
+            "created_on": "2025-06-08T10:00:00Z",
+            "razorpay_order_id": "order_ABC1234567890"
+        }
+    },
+    {
+        "model": "store.order",
+        "pk": 2,
+        "fields": {
+            "user": 1,
+            "status": "COMPLETED",
+            "contact_no": "+1234567890",
+            "address": "456 Oak Avenue, Metropolis",
+            "total": 749,
+            "created_on": "2025-06-07T15:30:00Z",
+            "razorpay_order_id": "order_DEF9876543210"
+        }
+    },
+    {
+        "model": "store.order",
+        "pk": 3,
+        "fields": {
+            "user": 1,
+            "status": "CANCELLED",
+            "contact_no": "+1234567890",
+            "address": "789 Pine Lane, Gotham",
+            "total": 19,
+            "created_on": "2025-06-06T09:15:00Z",
+            "razorpay_order_id": "order_GHI4567891234"
+        }
+    },
+    {
+        "model": "store.orderproduct",
+        "pk": 1,
+        "fields": {
+            "order": 1,
+            "product": 1,
+            "quantity": 2,
+            "price": "19.99"
+        }
+    },
+    {
+        "model": "store.orderproduct",
+        "pk": 2,
+        "fields": {
+            "order": 1,
+            "product": 2,
+            "quantity": 1,
+            "price": "19.99"
+        }
+    },
+    {
+        "model": "store.orderproduct",
+        "pk": 3,
+        "fields": {
+            "order": 2,
+            "product": 4,
+            "quantity": 1,
+            "price": "749.99"
+        }
+    },
+    {
+        "model": "store.orderproduct",
+        "pk": 4,
+        "fields": {
+            "order": 3,
+            "product": 1,
+            "quantity": 1,
+            "price": "19.99"
+        }
+    }
+]

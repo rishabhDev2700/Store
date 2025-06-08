@@ -1,13 +1,23 @@
+from unicodedata import category
 from django.shortcuts import render, get_object_or_404
-from django.shortcuts import render
+from django.db.models import Exists, OuterRef, Count, Q
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 # Create your views here.
 """This file contains all view functions related to store"""
 
 from django.shortcuts import redirect, render, get_object_or_404
 from store.forms import RatingForm
-from store.models import Category, Product, ProductImage, Rating
-from django.db.models import Prefetch
+from store.models import (
+    Category,
+    Product,
+    ProductAttribute,
+    ProductAttributeValue,
+    ProductVariant,
+    Rating,
+    ProductVariantImage,
+)
 from django.core.paginator import Paginator
 from django.contrib.postgres.search import SearchVector
 from taggit.models import Tag
@@ -16,57 +26,131 @@ from taggit.models import Tag
 
 
 def homepage(request):
-    """
-    Home page of the website
-    """
-    categories = Category.objects.all()
-    new_arrivals = Product.objects.all()[:10]
+    # Get categories for preview
+    categories = Category.objects.all()[:4]  # First 4 categories
     tags = Tag.objects.all()
-    context = {"products": new_arrivals, "tags": tags, "categories": categories}
+    # Get featured products (latest products as featured)
+    featured_products = Product.objects.filter(is_available=True).order_by(
+        "-date_added"
+    )[:8]
 
-    return render(request, "store/home.html", context=context)
+    context = {
+        "tags": tags,
+        "categories": categories,
+        "featured_products": featured_products,
+    }
+
+    return render(request, "store/home.html", context)
 
 
 def explore(request):
     """
     Explore page of the website
     """
-    categories = Category.objects.all()
     tags = Tag.objects.all()
-    return render(
-        request, "store/explore.html", context={"categories": categories, "tags": tags}
+    categories = Category.objects.annotate(
+        product_count=Count("product", filter=Q(product__is_available=True))
+    ).order_by("name")
+
+    # Get featured products (you can define this logic - maybe recent or popular ones)
+    featured_products = Product.objects.filter(is_available=True).order_by(
+        "-date_added"
+    )[
+        :8
+    ]  # Latest 8 products as featured
+
+    # Get all available products
+    products = (
+        Product.objects.filter(is_available=True)
+        .select_related("category")
+        .prefetch_related("tags", "variants")
+        .order_by("-date_added")
     )
+
+    context = {
+        "categories": categories,
+        "featured_products": featured_products,
+        "products": products,
+    }
+
+    return render(request, "store/explore.html", context)
 
 
 def list_all(request):
     """
-    Shows all products available
+    Shows all products that have at least one available variant
     """
-    # todo: add pagination
-    products = Product.objects.filter(is_available=True)
+    # Filter products that have at least one available variant
+    available_variant_subquery = ProductVariant.objects.filter(
+        product=OuterRef("pk"),
+        is_available=True,
+        stock__gt=0,  # Optional: only show if in stock
+    )
+
+    products = Product.objects.annotate(
+        has_available_variant=Exists(available_variant_subquery)
+    ).filter(has_available_variant=True)
+
     paginator = Paginator(products, 8)
     page_number = request.GET.get("page")
-    tags = Tag.objects.all()
     page = paginator.get_page(page_number)
-    context = {"products": page}
+
+    tags = Tag.objects.all()
+    categories = Category.objects.all()
+
+    context = {
+        "categories": categories,
+        "products": page,
+        "tags": tags,
+    }
     return render(request, "store/list-all.html", context=context)
 
 
 def show_product(request, slug):
-    """Show a particular product"""
+    """Show a particular product along with its variants and reviews"""
     product = get_object_or_404(Product, slug=slug)
+
+    variants = product.variants.filter(is_available=True, stock__gt=0).prefetch_related(
+        "attributes", "images"
+    )
+
+    # Optional: extract all attribute types and their values for frontend selectors
+    attribute_values = ProductAttributeValue.objects.filter(
+        id__in=[attr.id for variant in variants for attr in variant.attributes.all()]
+    ).select_related("attribute")
+
+    # Build a dict of attribute name -> set of values
+    attribute_options = {}
+    for attr_value in attribute_values:
+        name = attr_value.attribute.name
+        attribute_options.setdefault(name, set()).add(attr_value.value)
+
     reviews = Rating.objects.filter(product=product)[:5]
     categories = Category.objects.all()
     tags = Tag.objects.all()
-    reviews = Rating.objects.filter(product=product)[0:5]
-    images = ProductImage.objects.filter(product=product)
+    variant_data = []
+    for variant in variants:
+        variant_data.append(
+            {
+                "id": variant.id,
+                "price": variant.price,
+                "attributes": {
+                    v.attribute.name: v.value for v in variant.attributes.all()
+                },
+                "images": [img.image.url for img in variant.images.all()],
+            }
+        )
+
     context = {
         "product": product,
+        "variants": variants,
         "reviews": reviews,
         "categories": categories,
         "tags": tags,
-        "reviews": reviews,
-        "images": images,
+        "attribute_options": attribute_options,
+        # You can also pass the first variant’s images if needed
+        "variants_data_json": json.dumps(variant_data, cls=DjangoJSONEncoder),
+        "default_images": variants[0].images.all() if variants else [],
     }
     return render(request, "store/single-item.html", context=context)
 
@@ -133,10 +217,10 @@ def review_form(request, id):
 
 def search_products(request):
     query = request.GET.get("query")
-    # search_result = Product.objects.annotate(
-    #     search=SearchVector("name", "description", "slug")
-    # ).filter(search=query)
-    search_result = Product.objects.filter(name__startswith=query)
+    search_result = Product.objects.annotate(
+        search=SearchVector("name", "description", "slug")
+    ).filter(search=query)
+    # search_result = Product.objects.filter(name__startswith=query)
     tags = Tag.objects.all()
     print(query)
     return render(
